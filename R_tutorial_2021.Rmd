@@ -1,6 +1,6 @@
 ---
 title: "Tutorial: Data Analysis with R"
-author: Linda T. Betz, MSc
+author: Linda T. Betz, M.Sc.
 date: January 21, 2021
 output: 
   beamer_presentation:
@@ -31,7 +31,7 @@ library(tidyverse)
 the basics (largely based on https://r4ds.had.co.nz/)
 
 # Overview
-![](console.png)
+![](./imgs/console.png)
 
 # The basics
 R as a "calculator":
@@ -104,7 +104,7 @@ seq(1, 10)
 ```
 
 # The basics
-![](seq.png)
+![](./imgs/seq.png)
 
 # The basics
 Quotation marks and parentheses must always come in a pair. RStudio does its best to help you, but it's still possible to mess up and end up with a mismatch. If this happens, R will show you the continuation character "+":
@@ -140,11 +140,11 @@ Strategies:
 - search in English 
 - good starting point: Stackoverflow
 
-![](lmgtfy.jpg){ width=40% height=40% }
+![](./imgs/lmgtfy.jpg){ width=40% height=40% }
 
 # The basics
 In the environment in the upper right pane, you can see all of the objects that you’ve created.
-![](environment.PNG)
+![](./imgs/environment.PNG)
 
 # Creating projects
 It is common practice to keep all the files associated with a project together — input data, R scripts, analytical results, figures.
@@ -152,9 +152,9 @@ To create a project: Click File > New Project, then:
 \
 \
 
-![](project1.png){ width=30% height=30% }
-![](project2.png){ width=30% height=30% }
-![](project3.png){ width=30% height=30% }
+![](./imgs/project1.png){ width=30% height=30% }
+![](./imgs/project2.png){ width=30% height=30% }
+![](./imgs/project3.png){ width=30% height=30% }
 
 Think carefully about which subdirectory you put the project in. 
 
@@ -197,7 +197,7 @@ When you run `read_csv()`, it prints out a column specification with the name an
 data wrangling (largely based on https://r4ds.had.co.nz/)
 \
 \
-![](fishdata.PNG){ width=60% height=60% }
+![](./imgs/fishdata.PNG){ width=60% height=60% }
 
 # Why data wrangling?
 Data often does not come in a tidy, ready-to-use format.
@@ -207,8 +207,8 @@ Data often does not come in a tidy, ready-to-use format.
 - compute subscale scores
 - exclude people with to many missing values 
 
-![](weirddata.png){ width=60% height=60% }
-![](weirddata2.png){ width=30% height=30% }
+![](./imgs/weirddata.png){ width=60% height=60% }
+![](./imgs/weirddata2.png){ width=30% height=30% }
 
 # The dataset
 - open data set from the Center for Biomedical Research Excellence, accessible at https://coins.trendscenter.org/
@@ -312,7 +312,7 @@ Multiple arguments to `filter()` are combined with “and”: every expression m
 \
 \
 \
-![](booleans.png){ width=50% height=50% }
+![](./imgs/booleans.png){ width=50% height=50% }
 
 # Logical operations
 The following code finds all participants that are either defined as "bipolar" or "schizoaffective":
