@@ -275,19 +275,19 @@ data_cobre[1,1] # => first row, first column
 # Data transformation
 First, we are going to look at the five key dplyr functions that allow you to solve the vast majority of data manipulation challenges:
 
-- Pick observations by their values (filter()).
-- Reorder the rows (arrange()).
-- Pick variables by their names (select()).
-- Create new variables with functions of existing variables (mutate()).
-- Collapse many values down to a single summary (summarise()).
+- Pick observations by their values (`filter()`).
+- Reorder the rows (`arrange()`).
+- Pick variables by their names (`select()`).
+- Create new variables with functions of existing variables (`mutate()`).
+- Collapse many values down to a single summary (`summarize()`).
 
-All verbs work similarly:
+All 'verbs' work similarly:
 
 - The first argument is a data frame.
 - The subsequent arguments describe what to do with the data frame, using the variable names (without quotes).
 - The result is a new data frame.
 
-# Filter rows with filter()
+# Filter rows with `filter()`
 `filter()` allows you to subset observations based on their values. The first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame. For example, we can select all participants with age 65.
 ```{r, size="tiny"}
 filter(data_cobre, Age == 65)
@@ -409,28 +409,28 @@ How many patients have a missing value in the variable "Age_onset_psychiatric_il
 filter(data_cobre, Study_group != "Control" & is.na(Age_onset_psychiatric_illness))
 ```
 
-# Arrange rows with arrange()
+# Arrange rows with `arrange()`
 `arrange()` works similarly to `filter()` except that instead of selecting rows, it changes their order. It takes a data frame and a set of column names (or more complicated expressions) to order by. If you provide more than one column name, each additional column will be used to break ties in the values of preceding columns:
 ```{r, size="tiny"}
 arrange(data_cobre, Age)
 ```
 
-# Arrange rows with arrange()
+# Arrange rows with `arrange()`
 Use `desc()` to re-order by a column in descending order:
 ```{r, size="tiny"}
 arrange(data_cobre, desc(Age))
 ```
 Missing values are always sorted at the end.
 
-# Select columns with select()
+# Select columns with `select()`
 It’s not uncommon to get datasets with hundreds or even thousands of variables. `select()` allows you to select a useful subset using operations based on the names of the variables.
 
-`select()` is not terribly useful with our data set because we only have 7 variables, but you can still get the general idea:
+`select()` is not super useful with our data set because we only have 7 variables, but you can still get the general idea:
 ```{r, size="tiny"}
 select(data_cobre,  ID,  Age, Gender)
 ```
 
-# Select columns with select()
+# Select columns with `select()`
 There are a number of helper functions you can use within `select()`:
 
 - starts_with("abc"): matches names that begin with “abc”.
@@ -443,7 +443,7 @@ There are a number of helper functions you can use within `select()`:
 select(data_cobre, contains("Age"))
 ```
 
-# Select columns with select()
+# Select columns with `select()`
 Another option is to use `select()` in conjunction with the `everything()` helper. This is useful if you have a handful of variables you’d like to move to the start of the data frame.
 
 ```{r, size="tiny"}
@@ -472,7 +472,7 @@ Select all variables that contain the word "study".
 select(data_cobre, contains("Study"))
 ```
 
-# Add new variables with mutate()
+# Add new variables with `mutate()`
 `mutate()` adds new columns that are functions of existing columns. `mutate()` always adds new columns at the end of your dataset.
 ```{r, size="tiny"}
 mutate(data_cobre, Age_months = Age*12) # age in months
@@ -489,4 +489,86 @@ There are many functions for creating new variables that you can use with `mutat
 - Modular arithmetic: %/% (integer division) and %% (remainder)
 - Logs: log(), log2(), log10()
 - Logical comparisons: <, <=, >, >=, !=, and ==
+
+# Part III
+Summarize variables with `summarize()`
+
+# Grouped summaries with `summarize()`
+
+The last key data operation we'll look at is `summarize()`. It collapses a data frame to a single row:
+```{r, size="tiny"}
+summarize(data_cobre, Age = mean(Age)) 
+```
+`summarize()` is not terribly useful unless we pair it with `group_by()`. When you then use the dplyr verbs on a grouped data frame they’ll be automatically applied “by group”.
+
+````{r, size="tiny"}
+by_group <- group_by(data_cobre, Study_group) # save grouped data frame here
+summarize(by_group, Age = mean(Age), .groups = "keep") # mean age per group
+```
+
+# Grouped summaries with `summarize()`
+![](./imgs/group_summarize.png){ width=90% height=90% }
+
+# Combining multiple operations with the pipe (`%>%`)
+````{r, size="tiny"}
+by_group <- group_by(data_cobre, Study_group) # save grouped data frame here
+mean_age_groups <- summarize(by_group, Age = mean(Age), .groups = "drop") # mean age per group
+filtered_age <- filter(mean_age_groups, Age > 39)
+```
+
+An alternative, faster and less frustrating way to tackle this proplem is the pipe operator (`%>%`), which focuses on the transformations, not what’s being transformed, which makes the code easier to read. You can read it as a series of imperative statements: group, then summarize, then filter.
+
+````{r, size="tiny"}
+data_cobre %>% 
+  group_by(Study_group) %>% # save grouped data frame here
+  summarize(Age = mean(Age), .groups = "drop") %>% # mean age per group
+  filter(Age > 39)
+```
+
+# Combining multiple operations with the pipe (`%>%`)
+![](./imgs/tidyverse_logic.PNG){ width=80% height=80% }
+
+
+# Useful summary functions
+![](./imgs/summarize_funs.PNG){ width=80% height=80% }
+
+# Grouping by multiple variables
+When you group by multiple variables, each summary peels off one level of the grouping:
+
+````{r, size="tiny"}
+data_cobre %>% 
+  group_by(Study, Study_group) %>% # save grouped data frame here
+  summarize(Mean_Age = mean(Age), SD_Age = sd(Age), .groups = "drop") # mean/SD age per group
+```
+
+# Missing values (again)
+Aggregation functions obey the usual rule of missing values: if there’s any missing value in the input, the output will be a missing value.
+````{r, size="tiny"}
+data_cobre %>% 
+  summarize(mean = mean(Age_onset_psychiatric_illness))
+```
+All aggregation functions have an `na.rm` argument which removes the missing values prior to computation:
+````{r, size="tiny"}
+data_cobre %>% 
+  summarize(mean = mean(Age_onset_psychiatric_illness, na.rm = TRUE))
+```
+This mean onset age, however, is far too high. Something else is wrong here... 
+
+# Problematic coding of missing values
+Let's look at the variable more closely:
+````{r, size="tiny"}
+table(data_cobre$Age_onset_psychiatric_illness)
+```
+Looks like missing values are coded as '9999'.
+````{r, size="tiny"}
+data_cobre %>%
+  mutate(
+    Age_onset_psychiatric_illness = if_else( # recode 9999 to NA
+      Age_onset_psychiatric_illness == 9999,
+      true = NA_real_,
+      false = Age_onset_psychiatric_illness
+    )
+  ) %>%
+  summarize(mean = mean(Age_onset_psychiatric_illness, na.rm = TRUE))
+```
 
