@@ -1,7 +1,7 @@
 ---
 title: "Tutorial: Data Analysis with R"
 author: Linda T. Betz, M.Sc.
-date: January 21, 2021
+date: January 15, 2021
 output: 
   beamer_presentation:
     theme: "Boadilla"
@@ -207,21 +207,25 @@ data wrangling (largely based on https://r4ds.had.co.nz/)
 ![](./imgs/fishdata.PNG){ width=60% height=60% }
 
 # Why data wrangling?
+![](./imgs/cartoon.PNG){ width=70% height=70% }
+
+# Why data wrangling?
 Data often does not come in a tidy, ready-to-use format.
 
 - uninformative variable names
 - missing values coded as numbers (e.g. "-999") 
-- compute subscale scores
+- outliers
 - exclude people with to many missing values 
+- a lot of time is spent cleaning up data
 
 ![](./imgs/weirddata.png){ width=60% height=60% }
 ![](./imgs/weirddata2.png){ width=30% height=30% }
 
 # The dataset
-- open data set from the Center for Biomedical Research Excellence, accessible at https://coins.trendscenter.org/
+- open dataset from the Center for Biomedical Research Excellence (https://coins.trendscenter.org)
 - contains clinical participants with various diagnoses, and healthy controls
-- every row represents one participant
-- every column is a variable (e.g., diagnosis, age, gender...).
+- every row represents one participant, every column is a variable 
+- we'll use neuropsych data later in our machine learning exercises
 ```{r, message = TRUE, size="tiny"}
 data_cobre 
 ```
@@ -267,9 +271,9 @@ summary(data_cobre) # gives descriptive stats for every variable
 
 # Getting started
 ```{r, size="tiny"}
-data_cobre$Age # shows one specific variable
+data_cobre$age # shows one specific variable
 
-table(data_cobre$Gender) # shows frequency of values for one variable
+table(data_cobre$gender) # shows frequency of values for one variable
 ```
 
 # Getting started
@@ -297,17 +301,17 @@ All 'verbs' work similarly:
 # Filter rows with `filter()`
 `filter()` allows you to subset observations based on their values. The first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame. For example, we can select all participants with age 65.
 ```{r, size="tiny"}
-filter(data_cobre, Age == 65)
+filter(data_cobre, age == 65)
 ```
 When you run that line of code, dplyr executes the filtering operation and returns a new data frame. dplyr functions *never modify their inputs*, so if you want to save the result, you’ll need to use the assignment operator, <-:
 ```{r, size="tiny"}
-old_participants <- filter(data_cobre, Age == 65)
+old_participants <- filter(data_cobre, age == 65)
 ```
 
 # Comparisons
 To use filtering effectively, you have to know how to select the observations that you want using the comparison operators. R provides the standard suite: >, >=, <, <=, != (not equal), and == (equal). When you’re starting out with R, the easiest mistake to make is to use = instead of == when testing for equality. When this happens you’ll get an informative error:
 ```{r, error=TRUE}
-old_participants <- filter(data_cobre, Age = 65)
+old_participants <- filter(data_cobre, age = 65)
 ```
 
 # Logical operations
@@ -325,18 +329,14 @@ Multiple arguments to `filter()` are combined with “and”: every expression m
 The following code finds all participants that are either defined as "bipolar" or "schizoaffective":
 
 ```{r, size="tiny"}
-filter(data_cobre, Study_group == "Bipolar" | Study_group == "Schizoaffective")
+filter(data_cobre, study_group == "Bipolar" | study_group == "Schizoaffective")
 ```
 
 # Logical operations
 A useful short-hand for this problem is x %in% y. This will select every row where x is one of the values in y. We could use it to rewrite the code above:
 ```{r, size="tiny"}
-filter(data_cobre, Study_group %in% c("Bipolar", "Schizoaffective"))
+filter(data_cobre, study_group %in% c("Bipolar", "Schizoaffective"))
 ```
-
-# More complex operations
-
-xxxx
 
 
 # Missing values
@@ -389,43 +389,43 @@ data_cobre <- read_csv("data_cobre.csv") # load data
 - Find all participants who are 19 and younger. How many are there?
 - Find all healthy control participants who are 19 and younger. How many are there?
 - Find all women who are healthy controls and either have been diagnosed with bipolar disorder or schizophrenia. How many are there?
-- How many patients have a missing value in the variable "Age_onset_psychiatric_illness"?
+- How many patients have a missing value in the variable `age_onset_psychiatric_illness`?
 - BONUS: Why does `NA ^ 0` not return `NA`? Why is `NA | TRUE` not `NA`?
 
 # Solutions
 Find all participants who are 19 and younger. How many are there?
 ```{r, size="tiny"}
-filter(data_cobre, Age <= 19)
+filter(data_cobre, age <= 19)
 ```
 
 # Solutions
 Find all healthy control participants who are 19 and younger. How many are there?
 ```{r, size="tiny"}
-filter(data_cobre, Study_group == "Control" & Age <= 19)
+filter(data_cobre, study_group == "Control" & age <= 19)
 ```
 
 # Solutions
 Find all women who have been diagnosed with either bipolar disorder or schizophrenia. How many are there?
 ```{r, size="tiny"}
-filter(data_cobre, Gender == "female" & Study_group %in% c("Bipolar", "Schizophrenia"))
+filter(data_cobre, gender == "female" & study_group %in% c("Bipolar", "Schizophrenia"))
 ```
 
 # Solutions
-How many patients have a missing value in the variable "Age_onset_psychiatric_illness"?
+How many patients have a missing value in the variable `age_onset_psychiatric_illness`?
 ```{r, size="tiny"}
-filter(data_cobre, Study_group != "Control" & is.na(Age_onset_psychiatric_illness))
+filter(data_cobre, study_group != "Control" & is.na(age_onset_psychiatric_illness))
 ```
 
 # Arrange rows with `arrange()`
 `arrange()` works similarly to `filter()` except that instead of selecting rows, it changes their order. It takes a data frame and a set of column names (or more complicated expressions) to order by. If you provide more than one column name, each additional column will be used to break ties in the values of preceding columns:
 ```{r, size="tiny"}
-arrange(data_cobre, Age)
+arrange(data_cobre, age)
 ```
 
 # Arrange rows with `arrange()`
 Use `desc()` to re-order by a column in descending order:
 ```{r, size="tiny"}
-arrange(data_cobre, desc(Age))
+arrange(data_cobre, desc(age))
 ```
 Missing values are always sorted at the end.
 
@@ -434,7 +434,7 @@ It’s not uncommon to get datasets with hundreds or even thousands of variables
 
 `select()` is not super useful with our dataset because we only have `r ncol(data_cobre)` variables, but you can still get the general idea:
 ```{r, size="tiny"}
-select(data_cobre,  ID,  Age, Gender)
+select(data_cobre,  id,  age, gender)
 ```
 
 # Select columns with `select()`
@@ -447,46 +447,46 @@ There are a number of helper functions you can use within `select()`:
 - num_range("x", 1:3): matches x1, x2 and x3.
 
 ```{r, size="tiny"}
-select(data_cobre, contains("Age"))
+select(data_cobre, contains("age"))
 ```
 
 # Select columns with `select()`
 Another option is to use `select()` in conjunction with the `everything()` helper. This is useful if you have a handful of variables you’d like to move to the start of the data frame.
 
 ```{r, size="tiny"}
-select(data_cobre,  Study, Study_group, everything()) 
+select(data_cobre, study_group, everything()) 
 ```
 
 # Rename variables
 ```{r, size="tiny"}
-rename(data_cobre,  Participant_ID = ID) # logic: new_name = old_name
+rename(data_cobre, participant_id = id) # logic: new_name = old_name
 ```
 
 # Exercises
-- Rename all variables such that they contain lower case letters only.
+- Rename all variables such that they contain upper case letters only.
 - Select all variables that contain the word "study".
 - Conceptually, what's the difference between `filter()` and `select()`?
 
 # Solutions
-Rename all variables such that they contain lower case letters only.
+Rename all variables such that they contain upper case letters only.
 ```{r, size="tiny"}
-rename_with(data_cobre, tolower)
+rename_with(data_cobre, toupper)
 ```
 
 # Solutions
 Select all variables that contain the word "study".
 ```{r, size="tiny"}
-select(data_cobre, contains("Study"))
+select(data_cobre, contains("study"))
 ```
 
 # Add new variables with `mutate()`
 `mutate()` adds new columns that are functions of existing columns. `mutate()` always adds new columns at the end of your dataset.
 ```{r, size="tiny"}
-mutate(data_cobre, Age_months = Age*12) # age in months
+mutate(data_cobre, age_months = age*12) # age in months
 ```
 If you only want to keep the new variables, use `transmute()`:
 ```{r, size="tiny"}
-transmute(data_cobre, Age_months = Age*12) # age in months
+transmute(data_cobre, age_months = age*12) # age in months
 ```
 
 # Useful creation functions
@@ -498,8 +498,20 @@ There are many functions for creating new variables that you can use with `mutat
 - Logical comparisons: <, <=, >, >=, !=, and ==
 
 # Exercises
-- Create a new variable "Patient" that indicates if a participant has been diagnosed with any disorder, or not.
-- Z-transform the variable "Age", and store the result in a new variable "Age_z_score".
+- Create a new variable `patient` that indicates if a participant has been diagnosed with any disorder or not.
+- Z-transform the variable `age`, and store the result in a new variable `age_z_score`.
+
+# Solutions
+Create a new variable "patient" that indicates if a participant has been diagnosed with any disorder or not.
+````{r, size="tiny"}
+mutate(data_cobre, patient = if_else(study_group == "Control", true = TRUE, false = FALSE)) 
+```
+
+# Solutions
+Z-transform the variable "age", and store the result in a new variable "age_z_score".
+````{r, size="tiny"}
+mutate(data_cobre, age_z_score = (age-mean(age))/sd(age))
+```
 
 # Part III
 Summarize variables with `summarize()`
@@ -508,13 +520,13 @@ Summarize variables with `summarize()`
 
 The last key data operation we'll look at is `summarize()`. It collapses a data frame to a single row:
 ```{r, size="tiny"}
-summarize(data_cobre, Age = mean(Age)) 
+summarize(data_cobre, age_mean = mean(age)) 
 ```
 `summarize()` is not terribly useful unless we pair it with `group_by()`. When you then use the dplyr verbs on a grouped data frame they’ll be automatically applied “by group”.
 
 ````{r, size="tiny"}
-by_group <- group_by(data_cobre, Study_group) # save grouped data frame here
-summarize(by_group, Age = mean(Age), .groups = "keep") # mean age per group
+by_group <- group_by(data_cobre, study_group) # save grouped data frame here
+summarize(by_group, age = mean(age), .groups = "keep") # mean age per group
 ```
 
 # Grouped summaries with `summarize()`
@@ -522,18 +534,18 @@ summarize(by_group, Age = mean(Age), .groups = "keep") # mean age per group
 
 # Combining multiple operations with the pipe (`%>%`)
 ````{r, size="tiny"}
-by_group <- group_by(data_cobre, Study_group) # save grouped data frame here
-mean_age_groups <- summarize(by_group, Age = mean(Age), .groups = "drop") # mean age per group
-filtered_age <- filter(mean_age_groups, Age > 39)
+by_group <- group_by(data_cobre, study_group) # save grouped data frame here
+mean_age_groups <- summarize(by_group, age = mean(age), .groups = "drop") # mean age per group
+filtered_age <- filter(mean_age_groups, age > 39)
 ```
 
 An alternative, faster and less frustrating way to tackle this proplem is the pipe operator (`%>%`), which focuses on the transformations, not what’s being transformed, which makes the code easier to read. You can read it as a series of imperative statements: group, then summarize, then filter.
 
 ````{r, size="tiny"}
 data_cobre %>% 
-  group_by(Study_group) %>% # save grouped data frame here
-  summarize(Age = mean(Age), .groups = "drop") %>% # mean age per group
-  filter(Age > 39)
+  group_by(study_group) %>% # save grouped data frame here
+  summarize(age = mean(age), .groups = "drop") %>% # mean age per group
+  filter(age > 39)
 ```
 
 # Combining multiple operations with the pipe (`%>%`)
@@ -548,101 +560,101 @@ When you group by multiple variables, each summary peels off one level of the gr
 
 ````{r, size="tiny"}
 data_cobre %>% 
-  group_by(Study, Study_group) %>% # save grouped data frame here
-  summarize(Mean_Age = mean(Age), SD_Age = sd(Age), .groups = "drop") # mean/SD age per group
+  group_by(study_group, first_degree_relative_psychosis) %>% # save grouped data frame here
+  summarize(age_mean = mean(age), age_sd = sd(age), .groups = "drop") # mean/SD age per group
 ```
 
 # Missing values (again)
 Aggregation functions obey the usual rule of missing values: if there’s any missing value in the input, the output will be a missing value.
 ````{r, size="tiny"}
 data_cobre %>% 
-  summarize(mean = mean(Age_onset_psychiatric_illness))
+  summarize(age_onset_mean = mean(age_onset_psychiatric_illness))
 ```
 All aggregation functions have an `na.rm` argument which removes the missing values prior to computation:
 ````{r, size="tiny"}
 data_cobre %>% 
-  summarize(mean = mean(Age_onset_psychiatric_illness, na.rm = TRUE))
+  summarize(age_onset_mean = mean(age_onset_psychiatric_illness, na.rm = TRUE))
 ```
 This mean onset age, however, is far too high. Something else is wrong here... 
 
 # Problematic coding of missing values
 Let's look at the variable more closely:
 ````{r, size="tiny"}
-table(data_cobre$Age_onset_psychiatric_illness)
+table(data_cobre$age_onset_psychiatric_illness)
 ```
 Looks like missing values are coded as '9999'. Let's change that:
 ````{r, size="tiny"}
 data_cobre %>%
   mutate(
-    Age_onset_psychiatric_illness = if_else( # recode 9999 to NA
-      Age_onset_psychiatric_illness == "9999",
+    age_onset_psychiatric_illness = if_else( # recode 9999 to NA
+      age_onset_psychiatric_illness == "9999",
       true = NA_real_, # convert character to numeric vector
-      false = as.numeric(Age_onset_psychiatric_illness) # convert character to numeric vector
+      false = as.numeric(age_onset_psychiatric_illness) # convert character to numeric vector
     )
   ) %>%
-  summarize(mean = mean(Age_onset_psychiatric_illness, na.rm = TRUE))
+  summarize(mean = mean(age_onset_psychiatric_illness, na.rm = TRUE))
 ```
 
 # Exercises (use `%>%`)
-- Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder, and those who do not.
-- Recode the values in the variables `Age_onset_psychiatric_illness` and `Age_first_hospitalization` such that it can be analyzed properly. Overwrite the existing variables in `data_cobre`.
+- Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder and those who do not.
+- Recode the values in the variables `age_onset_psychiatric_illness` and `age_first_hospitalization` such that it can be analyzed properly. Overwrite the existing variables in `data_cobre`.
 - Create a new variable that gives the time since the onset of psychiatric illness in years. Then compute the mean time since onset of psychiatric illness for men and women.
 - Compute the earliest and latest age of onset of psychiatric illness.
 - Compute the median of age of onset of psychiatric illness by diagnosis.
 
 # Solutions
-- Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder, and those who do not.
+Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder and those who do not.
 ````{r, size="tiny"}
 data_cobre %>%
-  filter(Study_group != "Control" &
-           !is.na(First_degree_relative_psychosis)) %>%
-  group_by(First_degree_relative_psychosis, .drop = TRUE) %>%
-  summarize(mean_age = mean(Age),
-            sd_age = sd(Age))
+  filter(study_group != "Control" &
+           !is.na(first_degree_relative_psychosis)) %>%
+  group_by(first_degree_relative_psychosis, .groups = TRUE) %>%
+  summarize(age_mean = mean(age),
+            age_sd = sd(age))
 ```
 
 # Solutions
-- Recode the values in the variables `Age_onset_psychiatric_illness` and `Age_first_hospitalization` such that it can be analyzed properly. Overwrite the existing variables in `data_cobre`.
+Recode the values in the variables `age_onset_psychiatric_illness` and `age_first_hospitalization` such that it can be analyzed properly. Overwrite the existing variables in `data_cobre`.
 ````{r, size="tiny"}
 data_cobre <- data_cobre %>%
   mutate(
-    Age_onset_psychiatric_illness = if_else(
+    age_onset_psychiatric_illness = if_else(
       # recode 9999 to NA
-      Age_onset_psychiatric_illness == "9999",
+      age_onset_psychiatric_illness == "9999",
       true = NA_real_,
-      false = as.numeric(Age_onset_psychiatric_illness)
+      false = as.numeric(age_onset_psychiatric_illness)
     ),
-    Age_first_hospitalization = if_else(
+    age_first_hospitalization = if_else(
       # recode 9999 to NA
-      Age_first_hospitalization == "9999",
+      age_first_hospitalization == "9999",
       true = NA_real_,
-      false = as.numeric(Age_first_hospitalization)
+      false = as.numeric(age_first_hospitalization)
     )
   ) 
 ```
 
 # Solutions
-- Create a new variable that gives the time since the onset of psychiatric illness in years. Then compute the mean time since onset of psychiatric illness for men and women.
+Create a new variable that gives the time since the onset of psychiatric illness in years. Then compute the mean time since onset of psychiatric illness for men and women.
 ````{r, size="tiny"}
 data_cobre %>%
-  mutate(Time_since_onset = Age - Age_onset_psychiatric_illness) %>%
-  group_by(Gender, .drop = TRUE) %>%
-  summarize(mean = mean(Time_since_onset, na.rm = TRUE))
+  mutate(illness_duration = age - age_onset_psychiatric_illness) %>%
+  group_by(gender, .drop = TRUE) %>%
+  summarize(mean = mean(illness_duration, na.rm = TRUE))
 ```
 
 # Solutions
-- Compute the earliest and latest age of onset of psychiatric illness.
+Compute the earliest and latest age of onset of psychiatric illness.
 ````{r, size="tiny"}
 data_cobre %>%
-  summarize(min = min(Age_onset_psychiatric_illness, na.rm = TRUE),
-            max = max(Age_onset_psychiatric_illness, na.rm = TRUE))
+  summarize(age_onset_min = min(age_onset_psychiatric_illness, na.rm = TRUE),
+            age_onset_max = max(age_onset_psychiatric_illness, na.rm = TRUE))
 ```
 
 # Solutions
-- Compute the median of age of onset of psychiatric illness by diagnosis.
+Compute the median of age of onset of psychiatric illness by diagnosis.
 ````{r, size="tiny"}
 data_cobre %>%
-  filter(Study_group != "Control") %>%
-  group_by(Study_group, .drop = TRUE) %>%
-  summarize(median = median(Age_onset_psychiatric_illness, na.rm = TRUE))
+  filter(study_group != "Control") %>%
+  group_by(study_group, .drop = TRUE) %>%
+  summarize(age_onset_median = median(age_onset_psychiatric_illness, na.rm = TRUE))
 ```
