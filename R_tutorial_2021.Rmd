@@ -103,6 +103,11 @@ function_name(arg1 = val1, arg2 = val2, ...)
 seq(1, 10)
 ```
 
+To get help, type:
+```{r, eval = FALSE}
+?seq
+```
+
 # The basics
 ![](./imgs/seq.png)
 
@@ -138,12 +143,14 @@ Strategies:
 
 - copy error messages (works best if you search the English error message, i.e., use R in English)
 - search in English 
-- good starting point: Stackoverflow
+- good starting point: stackoverflow
 
-![](./imgs/lmgtfy.jpg){ width=40% height=40% }
+![](./imgs/lmgtfy.jpg){ width=35% height=35% }
 
 # The basics
 In the environment in the upper right pane, you can see all of the objects that you’ve created.
+\
+\
 ![](./imgs/environment.PNG)
 
 # Creating projects
@@ -222,16 +229,16 @@ data_cobre
 # Variable types
 Letter abbreviations under the column names describe the type of each variable:
 
-- dbl stands for doubles, or real numbers (0.25, 1.00, -5).
-- chr stands for character vectors, or strings ("abc").
-- fctr stands for factors, which R uses to represent categorical variables with fixed possible values ("female"/"male").
+- `dbl` stands for doubles, or real numbers (0.25, 1.00, -5).
+- `chr` stands for character vectors, or strings ("abc").
+- `fctr` stands for factors, which R uses to represent categorical variables with fixed possible values ("female"/"male").
+- `lgl` stands for logical, vectors that contain only TRUE or FALSE.
 
 There are other common types of variables that aren’t used in this dataset:
 
-- int stands for integers (1, 2, ...).
-- lgl stands for logical, vectors that contain only TRUE or FALSE.
-- date stands for dates (31.12.2020).
-- dttm stands for date-times (a date + a time; 31.12.2020 21:00).
+- `int` stands for integers (1, 2, ...).
+- `date` stands for dates (31.12.2020).
+- `dttm` stands for date-times (a date + a time; 31.12.2020 21:00).
 
 # Vectors
 A vector is a basic data structure in R. It contains *element of the same type*. Vectors are generally created using the `c()` function.
@@ -425,7 +432,7 @@ Missing values are always sorted at the end.
 # Select columns with `select()`
 It’s not uncommon to get datasets with hundreds or even thousands of variables. `select()` allows you to select a useful subset using operations based on the names of the variables.
 
-`select()` is not super useful with our data set because we only have 7 variables, but you can still get the general idea:
+`select()` is not super useful with our dataset because we only have `r ncol(data_cobre)` variables, but you can still get the general idea:
 ```{r, size="tiny"}
 select(data_cobre,  ID,  Age, Gender)
 ```
@@ -489,6 +496,10 @@ There are many functions for creating new variables that you can use with `mutat
 - Modular arithmetic: %/% (integer division) and %% (remainder)
 - Logs: log(), log2(), log10()
 - Logical comparisons: <, <=, >, >=, !=, and ==
+
+# Exercises
+- Create a new variable "Patient" that indicates if a participant has been diagnosed with any disorder, or not.
+- Z-transform the variable "Age", and store the result in a new variable "Age_z_score".
 
 # Part III
 Summarize variables with `summarize()`
@@ -559,16 +570,79 @@ Let's look at the variable more closely:
 ````{r, size="tiny"}
 table(data_cobre$Age_onset_psychiatric_illness)
 ```
-Looks like missing values are coded as '9999'.
+Looks like missing values are coded as '9999'. Let's change that:
 ````{r, size="tiny"}
 data_cobre %>%
   mutate(
     Age_onset_psychiatric_illness = if_else( # recode 9999 to NA
-      Age_onset_psychiatric_illness == 9999,
-      true = NA_real_,
-      false = Age_onset_psychiatric_illness
+      Age_onset_psychiatric_illness == "9999",
+      true = NA_real_, # convert character to numeric vector
+      false = as.numeric(Age_onset_psychiatric_illness) # convert character to numeric vector
     )
   ) %>%
   summarize(mean = mean(Age_onset_psychiatric_illness, na.rm = TRUE))
 ```
 
+# Exercises (use `%>%`)
+- Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder, and those who do not.
+- Recode the values in the variables `Age_onset_psychiatric_illness` and `Age_first_hospitalization` such that it can be analyzed properly. Overwrite the existing variables in `data_cobre`.
+- Create a new variable that gives the time since the onset of psychiatric illness in years. Then compute the mean time since onset of psychiatric illness for men and women.
+- Compute the earliest and latest age of onset of psychiatric illness.
+- Compute the median of age of onset of psychiatric illness by diagnosis.
+
+# Solutions
+- Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder, and those who do not.
+````{r, size="tiny"}
+data_cobre %>%
+  filter(Study_group != "Control" &
+           !is.na(First_degree_relative_psychosis)) %>%
+  group_by(First_degree_relative_psychosis, .drop = TRUE) %>%
+  summarize(mean_age = mean(Age),
+            sd_age = sd(Age))
+```
+
+# Solutions
+- Recode the values in the variables `Age_onset_psychiatric_illness` and `Age_first_hospitalization` such that it can be analyzed properly. Overwrite the existing variables in `data_cobre`.
+````{r, size="tiny"}
+data_cobre <- data_cobre %>%
+  mutate(
+    Age_onset_psychiatric_illness = if_else(
+      # recode 9999 to NA
+      Age_onset_psychiatric_illness == "9999",
+      true = NA_real_,
+      false = as.numeric(Age_onset_psychiatric_illness)
+    ),
+    Age_first_hospitalization = if_else(
+      # recode 9999 to NA
+      Age_first_hospitalization == "9999",
+      true = NA_real_,
+      false = as.numeric(Age_first_hospitalization)
+    )
+  ) 
+```
+
+# Solutions
+- Create a new variable that gives the time since the onset of psychiatric illness in years. Then compute the mean time since onset of psychiatric illness for men and women.
+````{r, size="tiny"}
+data_cobre %>%
+  mutate(Time_since_onset = Age - Age_onset_psychiatric_illness) %>%
+  group_by(Gender, .drop = TRUE) %>%
+  summarize(mean = mean(Time_since_onset, na.rm = TRUE))
+```
+
+# Solutions
+- Compute the earliest and latest age of onset of psychiatric illness.
+````{r, size="tiny"}
+data_cobre %>%
+  summarize(min = min(Age_onset_psychiatric_illness, na.rm = TRUE),
+            max = max(Age_onset_psychiatric_illness, na.rm = TRUE))
+```
+
+# Solutions
+- Compute the median of age of onset of psychiatric illness by diagnosis.
+````{r, size="tiny"}
+data_cobre %>%
+  filter(Study_group != "Control") %>%
+  group_by(Study_group, .drop = TRUE) %>%
+  summarize(median = median(Age_onset_psychiatric_illness, na.rm = TRUE))
+```
