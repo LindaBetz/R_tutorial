@@ -10,9 +10,7 @@
 #                                                                                                     #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
-
 # code to preprocess data used in the tutorial
-
 library(tidyverse)
 
 # load data (available via https://coins.trendscenter.org/)

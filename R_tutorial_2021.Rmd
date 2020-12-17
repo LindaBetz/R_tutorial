@@ -109,7 +109,7 @@ To get help, type:
 ```
 
 # The basics
-![](./imgs/seq.png)
+![](./imgs/seq.png){ width=90% height=90% }
 
 # The basics
 Quotation marks and parentheses must always come in a pair. RStudio does its best to help you, but it's still possible to mess up and end up with a mismatch. If this happens, R will show you the continuation character "+":
@@ -151,7 +151,7 @@ Strategies:
 In the environment in the upper right pane, you can see all of the objects that you’ve created.
 \
 \
-![](./imgs/environment.PNG)
+![](./imgs/environment.PNG){ width=85% height=85% }
 
 # Creating projects
 It is common practice to keep all the files associated with a project together — input data, R scripts, analytical results, figures.
@@ -608,9 +608,10 @@ Compute the mean (sd) age for patients who have a first degree relative with a p
 data_cobre %>%
   filter(study_group != "Control" &
            !is.na(first_degree_relative_psychosis)) %>%
-  group_by(first_degree_relative_psychosis, .groups = TRUE) %>%
+  group_by(first_degree_relative_psychosis) %>%
   summarize(age_mean = mean(age),
-            age_sd = sd(age))
+            age_sd = sd(age),
+            .groups = "keep")
 ```
 
 # Solutions
@@ -638,8 +639,9 @@ Create a new variable that gives the time since the onset of psychiatric illness
 ````{r, size="tiny"}
 data_cobre %>%
   mutate(illness_duration = age - age_onset_psychiatric_illness) %>%
-  group_by(gender, .drop = TRUE) %>%
-  summarize(mean = mean(illness_duration, na.rm = TRUE))
+  group_by(gender) %>%
+  summarize(mean = mean(illness_duration, na.rm = TRUE),
+            .groups = "keep")
 ```
 
 # Solutions
@@ -655,6 +657,7 @@ Compute the median of age of onset of psychiatric illness by diagnosis.
 ````{r, size="tiny"}
 data_cobre %>%
   filter(study_group != "Control") %>%
-  group_by(study_group, .drop = TRUE) %>%
-  summarize(age_onset_median = median(age_onset_psychiatric_illness, na.rm = TRUE))
+  group_by(study_group) %>%
+  summarize(age_onset_median = median(age_onset_psychiatric_illness, na.rm = TRUE),
+             .groups = "keep")
 ```

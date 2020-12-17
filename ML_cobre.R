@@ -11,6 +11,9 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 # ---------------------------------- 0: load libraries  -----------------------------------
+# check if required packages are installed, if not, install them
+packages <- c("mlr", "tidyverse", "e1071")
+install.packages(setdiff(packages, rownames(installed.packages())))  
 
 library(mlr)
 library(tidyverse)
@@ -55,7 +58,7 @@ task_cobre_neuropsych <-
     "cobre_neuropsych_task",
     data = data_cobre_neuropsych,
     target = "outcome",
-    positive = "Patient" 
+    positive = "Patient"
   )
 
 # let's check out the ML task we've created
@@ -70,14 +73,13 @@ task_cobre_neuropsych
 lrn <- makeLearner("classif.svm", kernel = "linear")
 
 # In order to tune a machine learning algorithm, you have to specify:
-  
+
 # a) the search space
 # b) the optimization algorithm (aka tuning method)
 # c) an evaluation method, i.e., a resampling strategy and a performance measure
 
 
 # a) search space: define hyperparameters of SVM + search space we are going to cover
-# search space based on: https://www.csie.ntu.edu.tw/~cjlin/papers/guide/guide.pdf
 ps <- makeParamSet(makeNumericParam(
   "cost",
   lower = -5,
@@ -92,8 +94,8 @@ ps <- makeParamSet(makeNumericParam(
 ctrl <-
   makeTuneControlRandom(budget = 50) # budget should at least be 50, better around 250
 
-# c) an evaluation method, i.e., a resampling strategy 
-# we define the set up of the inner resampling scheme: repeated CV 
+# c) an evaluation method, i.e., a resampling strategy
+# we define the set up of the inner resampling scheme: repeated CV
 inner <-
   makeResampleDesc("RepCV",
                    folds = 5,
@@ -131,7 +133,8 @@ lrn <- makeTuneWrapper(
   lrn,
   resampling = inner,
   par.set = ps,
-  measures = list(bac, tpr, tnr), # we use BAC as our perfomance measure (see 3.5), and TPR/TNR are returned in addition
+  measures = list(bac, tpr, tnr),
+  # we use BAC as our perfomance measure (see 3.5), and TPR/TNR are returned in addition
   control = ctrl,
   show.info = FALSE
 )
@@ -139,11 +142,14 @@ lrn <- makeTuneWrapper(
 # --------- 3.5: initialize outer resampling scheme ---------
 # initialize outer resampling scheme: repeated CV
 outer <-
-  makeResampleDesc("RepCV",
-                   folds = 5,
-                   reps = 2,
-                   predict = "both", # save results from both train/test folds
-                   stratify = TRUE)
+  makeResampleDesc(
+    "RepCV",
+    folds = 5,
+    reps = 2,
+    predict = "both",
+    # save results from both train/test folds
+    stratify = TRUE
+  )
 
 
 set.seed(1)
@@ -169,7 +175,9 @@ neuropsych_cobre_resampling$measures.train %>% mutate(set = "train") %>%
     group = set,
     fill = set
   )) +
-  geom_bar(stat = "identity", width=0.75, position = position_dodge(width=0.6)) +
+  geom_bar(stat = "identity",
+           width = 0.75,
+           position = position_dodge(width = 0.6)) +
   scale_fill_manual(values = c("lightgrey", "steelblue")) +
   coord_cartesian(ylim = c(0.5, 0.9)) +
   scale_x_continuous(breaks = seq(1, 10)) +
