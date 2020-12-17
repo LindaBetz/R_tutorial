@@ -1,3 +1,16 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     Code for    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+#                                                                                                     #
+#                                                                                                     #
+#                            Multivariate and Neuroimaging Methods in Psychiatry                      #
+#                                                                                                     #
+#                                    R software hands on session                                      #
+#                                                                                                     #
+#                                                                                                     #
+#                                                                                                     #
+#                                                                                                     #
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+
 # code to preprocess data used in the tutorial
 
 library(tidyverse)
@@ -5,27 +18,27 @@ library(tidyverse)
 # load data (available via https://coins.trendscenter.org/)
 demographics_cobre_raw <-
   read_csv("raw_data/1139_Demographics_20201215.csv")
-neuropsych_cobre_raw <- read_csv("raw_data/1139_Cobre_Neuropsych_V2_20201215.csv")
+neuropsych_cobre_raw <-
+  read_csv("raw_data/1139_Cobre_Neuropsych_V2_20201215.csv")
 
-
-# preprocessing: select/rename variable, transform some vals to NA
-# I've left some problematic coding unchanged on purpose (this will be an exercise later on)
-neuropsych_cobre_raw %>%
-  .[2:nrow(.),] %>% # first row has duplicated column headings
-  transmute(id = `Anonymized ID`, select(., matches("^ID|RawScore|_Value|Trials_Sum"))) -> neuropsych_cobre
-
-neuropsych_cobre_raw %>%
-  .[2:nrow(.),] %>% # first row has duplicated column headings
-  transmute(id = `Anonymized ID`, select(., matches("^ID|Matrics"))) -> neuropsych_cobre
+neuropsych_cobre <- neuropsych_cobre_raw %>%
+  .[2:nrow(.), ] %>% # first row has duplicated column headings
+  transmute(id = `Anonymized ID`, select(
+    .,
+    matches("^id|RawScore|Value|HVLT_Trials_Sum|BVMT_Trials_Sum")
+  )) 
 
 
 # ensure that variable names comply with R's conventions
-names(neuropsych_cobre) <- gsub("\\V.5_", "", names(neuropsych_cobre))
-names(neuropsych_cobre) <- gsub("\\-", "_", names(neuropsych_cobre))
+names(neuropsych_cobre) <-
+  gsub("\\V.5_", "", names(neuropsych_cobre))
+names(neuropsych_cobre) <-
+  gsub("\\-", "_", names(neuropsych_cobre))
 
-
-demographics_cobre_raw %>% 
-  .[2:nrow(.),] %>% # first row has duplicated column headings
+# preprocessing: select/rename variable, transform some vals to NA
+# I've left some problematic coding unchanged on purpose (this will be an exercise later on)
+demographics_cobre <- demographics_cobre_raw %>%
+  .[2:nrow(.), ] %>% # first row has duplicated column headings
   transmute(
     id = `Anonymized ID`,
     study_group = `Subject Type`,
@@ -38,11 +51,13 @@ demographics_cobre_raw %>%
   ) %>%
   filter(study == "COBRE") %>%
   mutate(
-    study_group = as.factor(case_when(
-      study_group %in% c("Chronic Sz", "Early Sz") ~  "Schizophrenia",
-      study_group %in% c("Old Control", "Young Control") ~ "Control",
-      TRUE ~ study_group
-    )),
+    study_group = as.factor(
+      case_when(
+        study_group %in% c("Chronic Sz", "Early Sz") ~  "Schizophrenia",
+        study_group %in% c("Old Control", "Young Control") ~ "Control",
+        TRUE ~ study_group
+      )
+    ),
     age_first_hospitalization = case_when(
       age_first_hospitalization %in% c("md",     "n/a" ,    "N/A", "unknown") ~ NA_character_,
       TRUE ~ age_first_hospitalization
@@ -62,11 +77,12 @@ demographics_cobre_raw %>%
     age = as.numeric(age)
   ) %>% distinct(id, .keep_all = TRUE) %>% # there are some duplicated IDs
   filter(id %in% neuropsych_cobre$id) %>%
-  select(-study) -> demographics_cobre
+  select(-study)
 
 
-neuropsych_cobre %>% bind_cols(demographics_cobre %>% select(study_group, age, gender)) %>%
-  select(id, study_group, age, gender, everything()) -> neuropsych_cobre
+neuropsych_cobre <-
+  neuropsych_cobre %>% bind_cols(demographics_cobre %>% select(study_group, age, gender)) %>%
+  select(id, study_group, age, gender, everything())
 
 
 # write out data as .csv
@@ -85,4 +101,3 @@ write.table(
   col.names = T,
   sep = ","
 )
-
