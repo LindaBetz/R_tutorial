@@ -34,7 +34,7 @@ data_cobre_neuropsych <- data_cobre_neuropsych %>%
   # then, we convert our outcome to a factor
   mutate(outcome = as.factor(outcome),
          gender = as.factor(gender)) %>%
-  select(-c(id, study_group)) # we don't need ID & Study_group anymore, so we drop it
+  select(-c(id, study_group)) # we don't need id & study_group anymore, so we drop it
 
 
 # ---------------------------------- 2: check missingness in data -----------------------------------
@@ -46,11 +46,12 @@ data_cobre_neuropsych %>%
 
 
 # ---------------------------------- 3: set up machine learning pipeline (nested resampling) -----------------------------------
-# Nested resampling is computationally expensive
-# Therefore, in the examples shown below we use a low number of optimization/resampling iterations
+# nested resampling is computationally expensive
+# therefore, in the examples shown below we use a rather low number of optimization/resampling iterations
+# both should be increased 
 
 # --------- 3.1: make a learning task ---------
-# Learning tasks encapsulate the data set and other relevant information about a machine learning problem
+# learning tasks encapsulate the data set and other relevant information about a machine learning problem
 # for example, the name of the target variable for supervised problems
 
 task_cobre_neuropsych <-
@@ -74,12 +75,12 @@ lrn <- makeLearner("classif.svm", kernel = "linear")
 
 # In order to tune a machine learning algorithm, you have to specify:
 
-# a) the search space
-# b) the optimization algorithm (aka tuning method)
-# c) an evaluation method, i.e., a resampling strategy and a performance measure
+# 1) the search space
+# 2) the optimization algorithm (aka tuning method)
+# 3) an evaluation method, i.e., a resampling strategy and a performance measure
 
 
-# a) search space: define hyperparameters of SVM + search space we are going to cover
+# 1) search space: define hyperparameters of SVM + search space we are going to cover
 ps <- makeParamSet(makeNumericParam(
   "cost",
   lower = -5,
@@ -89,12 +90,12 @@ ps <- makeParamSet(makeNumericParam(
   default = 0.01
 ))
 
-# b) the optimization algorithm (aka tuning method)
+# 2) the optimization algorithm (aka tuning method)
 # we use random search for hyperparameter optimization (this is not ideal and may be substituted by more advanced methods)
 ctrl <-
   makeTuneControlRandom(budget = 50) # budget should at least be 50, better around 250
 
-# c) an evaluation method, i.e., a resampling strategy
+# 3) an evaluation method, i.e., a resampling strategy
 # we define the set up of the inner resampling scheme: repeated CV
 inner <-
   makeResampleDesc("RepCV",
@@ -109,7 +110,7 @@ lrn <-
   makeImputeWrapper(lrn, classes = list(numeric = imputeMedian()))
 
 # --------- 3.4: feature preprocessing ---------
-# here, we include our preprocessing - 2 alternatives (run only one!):
+# here, we include our preprocessing - 2 alternatives (run only one - a) or b)):
 # a) a z-transformation on every variable
 lrn <-
   makePreprocWrapperCaret(lrn,
@@ -134,7 +135,7 @@ lrn <- makeTuneWrapper(
   resampling = inner,
   par.set = ps,
   measures = list(bac, tpr, tnr),
-  # we use BAC as our perfomance measure (see 3.5), and TPR/TNR are returned in addition
+  # we use BAC as our perfomance measure, and TPR/TNR are returned in addition
   control = ctrl,
   show.info = FALSE
 )
