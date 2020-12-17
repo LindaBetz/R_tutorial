@@ -11,7 +11,10 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 # code to preprocess data used in the tutorial
+# ---------------------------------- 0: load libraries  -----------------------------------
 library(tidyverse)
+
+# ---------------------------------- 1: load & preprocess data  -----------------------------------
 
 # load data (available via https://coins.trendscenter.org/)
 demographics_cobre_raw <-
@@ -82,7 +85,7 @@ neuropsych_cobre <-
   neuropsych_cobre %>% bind_cols(demographics_cobre %>% select(study_group, age, gender)) %>%
   select(id, study_group, age, gender, everything())
 
-
+# ---------------------------------- 2: export data  -----------------------------------
 # write out data as .csv
 write.table(
   demographics_cobre,
