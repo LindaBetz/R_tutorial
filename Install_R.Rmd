@@ -1,0 +1,85 @@
+---
+title: "Installing R, RStudio and packages"
+author: Linda T. Betz, M.Sc.
+date: January 18, 2021
+output: 
+  beamer_presentation:
+    theme: "Boadilla"
+    colortheme: "seahorse"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+```
+
+# Installing R, RStudio and packages
+In the tutorial, we will work with R, a free, open source programming language for data analytics, statistics and visualization. Please make sure to install the latest version of R *and* RStudio prior to the first tutorial session on January 18. This typically takes less than half an hour. You may follow the instructions provided here or any other available guide (e.g. https://learnr-examples.shinyapps.io/ex-setup-r/). Install R first, and *then* RStudio. Lastly, we will ask you to install some packages in advance.
+\
+\
+\
+![](./imgs/r_icons.png){ width=33% height=33% }
+
+
+# How to download and install R
+
+R is maintained by a team of developers who make the language available for free through the web page of *The Comprehensive R Archive Network* (http://cran.r-project.org/). The top of the web page provides three links for downloading R. Follow the link that describes your operating system: Windows, Mac OS, or Linux. We recommend to install R in English.
+
+# Windows
+To install R on Windows, click the “Download R for Windows” link. Then click the “base” link. Next, click the first link at the top of the new page. This link should say something like “Download R 4.0.3 for Windows”. The link downloads an installer program, which installs the most up-to-date version of R for Windows. Run this program and step through the installation wizard that appears. The installer lets you customize your installation, but the defaults will be suitable for most users. The wizard will install R into your program files folders and place a shortcut in your Start menu. Note that you’ll need to have all of the appropriate administration privileges to install new software on your machine.
+
+# Mac OS
+To install R on a Mac, click the “Download R for Mac” link. Next, click on the R-4.0.3 package link (or the package link for the most current release of R). An installer will download to guide you through the installation process, which is very easy. The installer lets you customize your installation, but the defaults will be suitable for most users. If your computer requires a password before installing new progams, you’ll need it here.
+
+# Linux
+R comes preinstalled on many Linux systems, but you need the newest version of R for the tutorial if yours is out of date. The CRAN website provides files to build R from source on Debian, Redhat, SUSE, and Ubuntu systems under the link “Download R for Linux.” Click the link and then follow the directory trail to the version of Linux you wish to install on. The exact installation procedure will vary depending on the Linux system you use. CRAN guides the process by grouping each set of source files with documentation or README files that explain how to install on your system. You can customize your installation, but the defaults will be suitable for most users.
+
+# How to download and install RStudio
+RStudio is a GUI that makes writing and organizing your R code a lot easier. The RStudio interface looks the same for Windows, Mac OS, and Linux. 
+
+You can download RStudio for free (https://rstudio.com/products/rstudio/). Install the Desktop version of R studio (Open Source Edition). Click on the corresponding button ("Download RStudio Desktop") and follow the simple instructions that follow. Once you’ve installed RStudio, you can open it like any other program on your computer—usually by clicking an icon on your desktop.
+
+# Opening RStudio
+
+When you open RStudio, a window appears with three panes in it. It should look something like this:
+
+
+![](./imgs/rstudio.png){ width=90% height=90% }
+
+
+
+# How to install packages
+Many useful functions do not come preloaded when you start R, but reside in packages that can be installed on top of R. For the tutorial, please install some packages in advance ("tidyverse", "caret", "e1071", "mlr"). To do that, type 
+```{r, eval=FALSE}
+install.packages(c("tidyverse", "caret", "e1071", "mlr"))
+```
+in the console in RStudio, and execute the code. Note that you need a connection to the internet to install packages. 
+
+# Test if the installation worked
+Test if installation worked by typing in the console: `library(tidyverse)`. 
+If everything worked fine, the output in the console look something like this:
+```{r, size="tiny"}
+
+library(tidyverse)
+
+```
+
+# Test if the installation worked
+Similarly, for the other packages:
+```{r, size="tiny"}
+library(caret)
+library(e1071)
+library(mlr)
+
+```
+
+# Problems
+If something did not work (e.g., you get an error of the nature `Error in library(tidyverse) : there is no package called ‘tidyverse’`), try to install the packages manually by clicking Tools → Install packages in RStudio. If you still cannot get things running, please contact us **before the tutorial** (linda.betz@uk-koeln.de) :)
+
+
+
