@@ -1,7 +1,7 @@
 ---
 title: "Tutorial: Data Analysis with R"
 author: Linda T. Betz, M.Sc.
-date: January 15, 2021
+date: January 18, 2021
 output: 
   beamer_presentation:
     theme: "Boadilla"
@@ -19,18 +19,35 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 library(tidyverse)
 
 ```
+# Structure of the tutorial
+
+- January 18 (today): introduction to basic R syntax and priniciples, data cleaning and wrangling
+- January 25: Machine Learning in R (part I)
+- Feburary 1: Machine Learning in R (part II), working on your reports
+
 
 # Why R?
 
-- optimized for data analysis and visualization
-- open source → access to source code: everyone can check what is going on inside a function (in contrast to, e.g. SPSS) 
-- many add-on packages for advanced statistical analysis
-- active, inclusive community → support/feedback, sharing of code
+- Optimized for data analysis and visualization
+- Open source → access to source code: everyone can check what is going on inside a function (in contrast to, e.g. SPSS) 
+- Many add-on packages for advanced statistical analysis
+- Active, inclusive community → support/feedback, sharing of code
+
+# Today's tutorial ...
+... is based on selected chapters from *R for Data Science* (https://r4ds.had.co.nz/)
+\
+\
+![](./imgs/r4ds.png){ width=50% height=50% }
+
 
 # PART I
-the basics (largely based on https://r4ds.had.co.nz/)
+the basics 
+\
+\
+\
+![](./imgs/start.jpg){ width=50% height=50% }
 
-# Overview
+# RStudio 
 ![](./imgs/console.png)
 
 # The basics
@@ -111,14 +128,6 @@ To get help, type:
 # The basics
 ![](./imgs/seq.png){ width=90% height=90% }
 
-# The basics
-Quotation marks and parentheses must always come in a pair. RStudio does its best to help you, but it's still possible to mess up and end up with a mismatch. If this happens, R will show you the continuation character "+":
-
-```
-> x <- "hello
-+
-```
-The `+` tells you that R is waiting for more input; it doesn't think you're done yet. Usually that means you've forgotten either a `"` or a `)`. Either add the missing pair, or press ESCAPE to abort the expression and try again.
 
 # The basics
 If you make an assignment, you don't get to see the value. You're then tempted to immediately double-check the result:
@@ -135,17 +144,14 @@ This common action can be shortened by surrounding the assignment with parenthes
 ```
 
 # The basics
-Important:
+Quotation marks and parentheses must always come in a pair. RStudio does its best to help you, but it's still possible to mess up and end up with a mismatch. If this happens, R will show you the continuation character "+":
 
-- 99% of problems/error messages can be solved or decoded via googling 
+```
+> x <- "hello
++
+```
+The `+` tells you that R is waiting for more input; it doesn't think you're done yet. Usually that means you've forgotten either a `"` or a `)`. Either add the missing pair, or press ESCAPE to abort the expression and try again.
 
-Strategies:
-
-- copy error messages (works best if you search the English error message, i.e., use R in English)
-- search in English 
-- good starting point: stackoverflow
-
-![](./imgs/lmgtfy.jpg){ width=35% height=35% }
 
 # The basics
 In the environment in the upper right pane, you can see all of the objects that you’ve created.
@@ -153,9 +159,23 @@ In the environment in the upper right pane, you can see all of the objects that 
 \
 ![](./imgs/environment.PNG){ width=85% height=85% }
 
-# Creating projects
+# The basics
+Important:
+
+- 99% of problems/error messages can be solved using Google 
+
+Strategies:
+
+- Copy error messages (works best if you search the English error message, i.e., use R in English)
+- Search in English 
+- Good starting point: stackoverflow
+
+![](./imgs/lmgtfy.jpg){ width=35% height=35% }
+
+
+# Create projects
 It is common practice to keep all the files associated with a project together — input data, R scripts, analytical results, figures.
-To create a project: Click File > New Project, then:  
+To create a project: Click File → New Project, then:  
 \
 \
 
@@ -165,7 +185,9 @@ To create a project: Click File > New Project, then:
 
 Think carefully about which subdirectory you put the project in. 
 
-# Creating projects
+- Please open RStudio and create a project called "R_tutorial_2021" now. 
+
+# Create projects
 Check that the "home" directory of your project is the current working directory:
 ```{r}
 getwd()
@@ -179,29 +201,16 @@ Some good practices:
 - Save your outputs (plots and cleaned data) there.
 - Only ever use relative paths, not absolute paths.
 
-# Installation of packages
-Many useful functions are not built-in directly into R, but have to be imported from external extensions, so-called "packages". We first need to install them. Here, we install the tidyverse, a collection of R packages for data wrangling, analysis and visualization.
+
+# Install packages
+Many useful functions are not built-in directly into R, but have to be imported from external extensions, so-called "packages". We first need to install them. Here, we install the tidyverse, a collection of R packages for data wrangling, analysis and visualization. This piece of code should look familiar ;)
 ```{r, eval=FALSE}
 install.packages("tidyverse")
 ```
 
-# Loading data
-We load files in R with the readr package. First, we load the package via `library()`. It is good practice to load all libraries you use in an analysis in the beginning of the script. Generally, packages from the tidyverse should be loaded last.
-```{r, message=TRUE}
-library(tidyverse)
-```
-Check out the print out you get when you run the code. It shows which packages are overwritten by dplyr. Some functions from base R now have to be called explicitly (e.g. stats::filter).
-
-# Loading data
-Next, we can use `read_csv()` from the tidyverse package to load the data file "data_cobre.csv". The first argument to `read_csv()` is the most important: it's the path to the file to read. If you have created a R project and have placed "data_cobre.csv" in the corresponding project folder, you can use relative rather than absolute paths to load your file:
-
-```{r, message = TRUE, size="tiny"}
-data_cobre <- read_csv("data_cobre.csv")
-```
-When you run `read_csv()`, it prints out a column specification with the name and type of each column. `read_csv()` uses the first line of the data for the column names, which is a common convention.
 
 # PART II
-data wrangling (largely based on https://r4ds.had.co.nz/)
+data wrangling 
 \
 \
 ![](./imgs/fishdata.PNG){ width=60% height=60% }
@@ -212,20 +221,38 @@ data wrangling (largely based on https://r4ds.had.co.nz/)
 # Why data wrangling?
 Data often does not come in a tidy, ready-to-use format.
 
-- uninformative variable names
-- missing values coded as numbers (e.g. "-999") 
-- outliers
-- exclude people with to many missing values 
-- a lot of time is spent cleaning up data
+- Uninformative variable names
+- Missing values coded as numbers (e.g. "-999") 
+- Exclude people with to many missing values 
 
 ![](./imgs/weirddata.png){ width=60% height=60% }
 ![](./imgs/weirddata2.png){ width=30% height=30% }
 
+
+# Workflow
+![](./imgs/tidyworkflow.png){ width=65% height=65% }
+
+# Import data
+We can import files into R using the tidyverse package. First, we load the package via `library()`. It is good practice to load all libraries you use in an analysis in the beginning of the script. Generally, packages from the tidyverse should be loaded last.
+```{r, message=TRUE}
+library(tidyverse)
+```
+Check out the print out you get when you run the code. It shows which packages are overwritten by dplyr. Some functions from base R now have to be called explicitly (e.g. stats::filter).
+
+# Import data
+Next, we can use `read_csv()` from the tidyverse package to import the data file "data_cobre.csv". The first argument to `read_csv()` is the most important: it's the path to the file to read. If you have created a R project and have placed "data_cobre.csv" in the corresponding project folder, you can use relative rather than absolute paths to load your file:
+
+```{r, message = TRUE, size="tiny"}
+data_cobre <- read_csv("data_cobre.csv")
+```
+When you run `read_csv()`, it prints out a column specification with the name and type of each column. `read_csv()` uses the first line of the data for the column names, which is a common convention.
+
+
 # The dataset
-- open dataset from the Center for Biomedical Research Excellence (https://coins.trendscenter.org)
-- contains clinical participants with various diagnoses, and healthy controls
-- every row represents one participant, every column is a variable 
-- we'll use neuropsych data later in our machine learning exercises
+- Open dataset from the Center for Biomedical Research Excellence (https://coins.trendscenter.org)
+- Contains clinical participants with various diagnoses from the schizophrenia spectrum, and healthy controls
+- Every row represents one participant, every column is a variable 
+- We'll use neuropsychological data later for Machine Learning 
 ```{r, message = TRUE, size="tiny"}
 data_cobre 
 ```
@@ -247,15 +274,13 @@ There are other common types of variables that aren’t used in this dataset:
 # Vectors
 A vector is a basic data structure in R. It contains *element of the same type*. Vectors are generally created using the `c()` function.
 ```{r}
-x <- c(1, 5, 4, 9, 0)
-x
-y <- c("male", "female", "female", "male")
-y
+(x <- c(1, 5, 4, 9, 0))
+(y <- c("male", "female", "female", "male"))
+
 ```
 `c()` will try and coerce elements to the *same type* if they are different.
 ```{r}
-x <- c(1, 5.4, TRUE, "hello")
-x
+(x <- c(1, 5.4, TRUE, "hello"))
 ```
 
 # Getting started
@@ -276,18 +301,10 @@ data_cobre$age # shows one specific variable
 table(data_cobre$gender) # shows frequency of values for one variable
 ```
 
-# Getting started
-```{r, size="tiny"}
-data_cobre[,1] # => first column
-data_cobre[1,] # => first row
-data_cobre[1,1] # => first row, first column
-```
-
 # Data transformation
-First, we are going to look at the five key dplyr functions that allow you to solve the vast majority of data manipulation challenges:
+First, we are going to look at four key dplyr functions that allow you to solve the vast majority of data manipulation challenges:
 
 - Pick observations by their values (`filter()`).
-- Reorder the rows (`arrange()`).
 - Pick variables by their names (`select()`).
 - Create new variables with functions of existing variables (`mutate()`).
 - Collapse many values down to a single summary (`summarize()`).
@@ -309,7 +326,7 @@ old_participants <- filter(data_cobre, age == 65)
 ```
 
 # Comparisons
-To use filtering effectively, you have to know how to select the observations that you want using the comparison operators. R provides the standard suite: >, >=, <, <=, != (not equal), and == (equal). When you’re starting out with R, the easiest mistake to make is to use = instead of == when testing for equality. When this happens you’ll get an informative error:
+To use filtering effectively, you have to know how to select the observations that you want using the comparison operators. R provides the standard suite: `>`, `>=`, `<`, `<=`, `!=` (not equal), and `==` (equal). When you’re starting out with R, the easiest mistake to make is to use `=` instead of `==` when testing for equality. When this happens you’ll get an informative error:
 ```{r, error=TRUE}
 old_participants <- filter(data_cobre, age = 65)
 ```
@@ -317,9 +334,9 @@ old_participants <- filter(data_cobre, age = 65)
 # Logical operations
 Multiple arguments to `filter()` are combined with “and”: every expression must be true in order for a row to be included in the output. For other types of combinations, you’ll need to use Boolean operators: 
 
-- & is “and”
-- | is “or”
-- ! is “not” 
+- `&` is “and”
+- `|` is “or”
+- `!` is “not” 
 \
 \
 \
@@ -329,39 +346,22 @@ Multiple arguments to `filter()` are combined with “and”: every expression m
 The following code finds all participants that are either defined as "bipolar" or "schizoaffective":
 
 ```{r, size="tiny"}
-filter(data_cobre, study_group == "Bipolar" | study_group == "Schizoaffective")
+filter(data_cobre, study_group == "bipolar" | study_group == "schizoaffective")
 ```
 
 # Logical operations
-A useful short-hand for this problem is x %in% y. This will select every row where x is one of the values in y. We could use it to rewrite the code above:
+A useful short-hand for this problem is `x %in% y`. This will select every row where x is one of the values in y. We could use it to rewrite the code on the previous slide:
 ```{r, size="tiny"}
-filter(data_cobre, study_group %in% c("Bipolar", "Schizoaffective"))
+filter(data_cobre, study_group %in% c("bipolar", "schizoaffective"))
 ```
 
 
 # Missing values
-One important feature of R that can make comparison tricky are missing values, or NAs (“not availables”). NA represents an unknown value: almost any operation involving an unknown value will also be unknown.
+One important feature of R that can make comparison tricky are missing values, or NAs (“not availables”). `NA` represents an unknown value: almost any operation involving an unknown value will also be unknown.
 ```{r}
 10 == NA
 NA + 5
 NA / 9
-```
-
-# Missing values
-The most confusing result is this one:
-```{r}
-NA == NA
-```
-
-It's easiest to understand why this is true with a bit more context:
-```{r}
-# Let x be Pedro's age. We don't know how old he is.
-x <- NA
-# Let y be Julian's age. We don't know how old he is.
-y <- NA
-# Are Julian and Pedro the same age?
-x == y
-# We don't know!
 ```
 
 # Missing values
@@ -377,20 +377,23 @@ filter(df, x > 1)
 filter(df, is.na(x) | x > 1)
 ```
 
+# Break
+![](./imgs/break.jpg){width=50% height=50%}
+
+
 # Excercises
-Before getting started with the exercises, please make sure you have run the following code:
+Before getting started with the exercises, put the file `data_cobre.csv` in your project folder. In RStudio, click File → New File → R Script. Use this script to type in and save your solutions for the exercises (e.g. as "exercises.R"). These should be the first lines of your script:
 ```{r, eval=FALSE}
-install.packages("tidyverse") # install package we need
 library(tidyverse) # load the package 
 data_cobre <- read_csv("data_cobre.csv") # load data
 ```
+You can run blocks of code by selecting them and pressing Ctrl+Enter (or the "Run" button in the upper right corner of the script pane).
 
 # Excercises
 - Find all participants who are 19 and younger. How many are there?
 - Find all healthy control participants who are 19 and younger. How many are there?
 - Find all women who are healthy controls and either have been diagnosed with bipolar disorder or schizophrenia. How many are there?
 - How many patients have a missing value in the variable `age_onset_psychiatric_illness`?
-- BONUS: Why does `NA ^ 0` not return `NA`? Why is `NA | TRUE` not `NA`?
 
 # Solutions
 Find all participants who are 19 and younger. How many are there?
@@ -401,33 +404,20 @@ filter(data_cobre, age <= 19)
 # Solutions
 Find all healthy control participants who are 19 and younger. How many are there?
 ```{r, size="tiny"}
-filter(data_cobre, study_group == "Control" & age <= 19)
+filter(data_cobre, study_group == "control" & age <= 19)
 ```
 
 # Solutions
 Find all women who have been diagnosed with either bipolar disorder or schizophrenia. How many are there?
 ```{r, size="tiny"}
-filter(data_cobre, gender == "female" & study_group %in% c("Bipolar", "Schizophrenia"))
+filter(data_cobre, gender == "female" & study_group %in% c("bipolar", "schizophrenia"))
 ```
 
 # Solutions
 How many patients have a missing value in the variable `age_onset_psychiatric_illness`?
 ```{r, size="tiny"}
-filter(data_cobre, study_group != "Control" & is.na(age_onset_psychiatric_illness))
+filter(data_cobre, study_group != "control" & is.na(age_onset_psychiatric_illness))
 ```
-
-# Arrange rows with `arrange()`
-`arrange()` works similarly to `filter()` except that instead of selecting rows, it changes their order. It takes a data frame and a set of column names (or more complicated expressions) to order by. If you provide more than one column name, each additional column will be used to break ties in the values of preceding columns:
-```{r, size="tiny"}
-arrange(data_cobre, age)
-```
-
-# Arrange rows with `arrange()`
-Use `desc()` to re-order by a column in descending order:
-```{r, size="tiny"}
-arrange(data_cobre, desc(age))
-```
-Missing values are always sorted at the end.
 
 # Select columns with `select()`
 It’s not uncommon to get datasets with hundreds or even thousands of variables. `select()` allows you to select a useful subset using operations based on the names of the variables.
@@ -440,21 +430,14 @@ select(data_cobre,  id,  age, gender)
 # Select columns with `select()`
 There are a number of helper functions you can use within `select()`:
 
-- starts_with("abc"): matches names that begin with “abc”.
-- ends_with("xyz"): matches names that end with “xyz”.
-- contains("ijk"): matches names that contain “ijk”.
-- matches("(.)\\1"): selects variables that match a regular expression. 
-- num_range("x", 1:3): matches x1, x2 and x3.
+- `starts_with("abc")`: matches names that begin with “abc”.
+- `ends_with("xyz")`: matches names that end with “xyz”.
+- `contains("ijk")`: matches names that contain “ijk”.
+- `matches("(.)\\1")`: selects variables that match a regular expression. 
+- `num_range("x", 1:3)`: matches x1, x2 and x3.
 
 ```{r, size="tiny"}
 select(data_cobre, contains("age"))
-```
-
-# Select columns with `select()`
-Another option is to use `select()` in conjunction with the `everything()` helper. This is useful if you have a handful of variables you’d like to move to the start of the data frame.
-
-```{r, size="tiny"}
-select(data_cobre, study_group, everything()) 
 ```
 
 # Rename variables
@@ -464,8 +447,7 @@ rename(data_cobre, participant_id = id) # logic: new_name = old_name
 
 # Exercises
 - Rename all variables such that they contain upper case letters only.
-- Select all variables that contain the word "study".
-- Conceptually, what's the difference between `filter()` and `select()`?
+- Select all variables that contain the word "study" or "age".
 
 # Solutions
 Rename all variables such that they contain upper case letters only.
@@ -474,9 +456,9 @@ rename_with(data_cobre, toupper)
 ```
 
 # Solutions
-Select all variables that contain the word "study".
+Select all variables that contain the word "study" or "age".
 ```{r, size="tiny"}
-select(data_cobre, contains("study"))
+select(data_cobre, matches("study|age"))
 ```
 
 # Add new variables with `mutate()`
@@ -492,29 +474,36 @@ transmute(data_cobre, age_months = age*12) # age in months
 # Useful creation functions
 There are many functions for creating new variables that you can use with `mutate()`. The function must have a key property: it must take a vector of values as input, return a vector with the same number of values as output. Some examples:
 
-- Arithmetic operators: +, -, *, /, ^.
-- Modular arithmetic: %/% (integer division) and %% (remainder)
-- Logs: log(), log2(), log10()
-- Logical comparisons: <, <=, >, >=, !=, and ==
+- Arithmetic operators: `+`, `-`, `*`, `/`, `^`.
+- Modular arithmetic: `%/%` (integer division) and `%%` (remainder).
+- Logs: `log()`, `log2()`, `log10()`.
+- Logical comparisons: `<`, `<=`, `>`, `>=`, `!=`, and `==`.
 
 # Exercises
 - Create a new variable `patient` that indicates if a participant has been diagnosed with any disorder or not.
-- Z-transform the variable `age`, and store the result in a new variable `age_z_score`.
+- Z-transform the variable `age`, and store the result in a new variable called `age_z_score`.
+
+Remember to use Google if necessary :)
 
 # Solutions
-Create a new variable "patient" that indicates if a participant has been diagnosed with any disorder or not.
+Create a new variable `patient` that indicates if a participant has been diagnosed with any disorder or not.
 ````{r, size="tiny"}
-mutate(data_cobre, patient = if_else(study_group == "Control", true = TRUE, false = FALSE)) 
+mutate(data_cobre, patient = if_else(study_group == "control", true = TRUE, false = FALSE)) 
 ```
 
 # Solutions
-Z-transform the variable "age", and store the result in a new variable "age_z_score".
+Z-transform the variable "age", and store the result in a new variable called "age_z_score".
 ````{r, size="tiny"}
 mutate(data_cobre, age_z_score = (age-mean(age))/sd(age))
-```
 
+```
+````{r, size="tiny", eval=FALSE}
+mutate(data_cobre, age_z_score = scale(age))
+
+```
 # Part III
 Summarize variables with `summarize()`
+
 
 # Grouped summaries with `summarize()`
 
@@ -532,7 +521,11 @@ summarize(by_group, age = mean(age), .groups = "keep") # mean age per group
 # Grouped summaries with `summarize()`
 ![](./imgs/group_summarize.png){ width=90% height=90% }
 
-# Combining multiple operations with the pipe (`%>%`)
+
+# Useful summary functions
+![](./imgs/summarize_funs.PNG){ width=80% height=80% }
+
+# Combine multiple operations with the pipe (`%>%`)
 ````{r, size="tiny"}
 by_group <- group_by(data_cobre, study_group) # save grouped data frame here
 mean_age_groups <- summarize(by_group, age = mean(age), .groups = "drop") # mean age per group
@@ -548,14 +541,11 @@ data_cobre %>%
   filter(age > 39)
 ```
 
-# Combining multiple operations with the pipe (`%>%`)
+# Combine multiple operations with the pipe (`%>%`)
 ![](./imgs/tidyverse_logic.PNG){ width=80% height=80% }
 
 
-# Useful summary functions
-![](./imgs/summarize_funs.PNG){ width=80% height=80% }
-
-# Grouping by multiple variables
+# Group by multiple variables
 When you group by multiple variables, each summary peels off one level of the grouping:
 
 ````{r, size="tiny"}
@@ -599,14 +589,13 @@ data_cobre %>%
 - Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder and those who do not.
 - Recode the values in the variables `age_onset_psychiatric_illness` and `age_first_hospitalization` such that it can be analyzed properly. Overwrite the existing variables in `data_cobre`.
 - Create a new variable that gives the time since the onset of psychiatric illness in years. Then compute the mean time since onset of psychiatric illness for men and women.
-- Compute the earliest and latest age of onset of psychiatric illness.
 - Compute the median of age of onset of psychiatric illness by diagnosis.
 
 # Solutions
 Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder and those who do not.
 ````{r, size="tiny"}
 data_cobre %>%
-  filter(study_group != "Control" &
+  filter(study_group != "control" &
            !is.na(first_degree_relative_psychosis)) %>%
   group_by(first_degree_relative_psychosis) %>%
   summarize(age_mean = mean(age),
@@ -645,19 +634,20 @@ data_cobre %>%
 ```
 
 # Solutions
-Compute the earliest and latest age of onset of psychiatric illness.
-````{r, size="tiny"}
-data_cobre %>%
-  summarize(age_onset_min = min(age_onset_psychiatric_illness, na.rm = TRUE),
-            age_onset_max = max(age_onset_psychiatric_illness, na.rm = TRUE))
-```
-
-# Solutions
 Compute the median of age of onset of psychiatric illness by diagnosis.
 ````{r, size="tiny"}
 data_cobre %>%
-  filter(study_group != "Control") %>%
+  filter(study_group != "control") %>%
   group_by(study_group) %>%
   summarize(age_onset_median = median(age_onset_psychiatric_illness, na.rm = TRUE),
              .groups = "keep")
 ```
+
+
+# Thank you for your attention!
+If you have any questions on today's content, please feel free to contact me.
+
+- linda.betz@uk-koeln.de
+
+Next week, Julian and Pedro will walk you through a Machine Learning analysis using neuropsychological data.
+

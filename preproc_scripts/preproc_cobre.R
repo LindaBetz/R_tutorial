@@ -55,9 +55,9 @@ demographics_cobre <- demographics_cobre_raw %>%
   mutate(
     study_group = as.factor(
       case_when(
-        study_group %in% c("Chronic Sz", "Early Sz") ~  "Schizophrenia",
-        study_group %in% c("Old Control", "Young Control") ~ "Control",
-        TRUE ~ study_group
+        study_group %in% c("Chronic Sz", "Early Sz") ~  "schizophrenia",
+        study_group %in% c("Old Control", "Young Control") ~ "control",
+        TRUE ~ tolower(study_group)
       )
     ),
     age_first_hospitalization = case_when(
