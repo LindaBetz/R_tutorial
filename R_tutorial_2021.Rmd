@@ -34,7 +34,7 @@ library(tidyverse)
 - Active, inclusive community → support/feedback, sharing of code
 
 # Today's tutorial ...
-... is based on selected chapters from *R for Data Science* (https://r4ds.had.co.nz/)
+... is based on selected chapters from *R for Data Science* (https://r4ds.had.co.nz/).
 \
 \
 ![](./imgs/r4ds.png){ width=50% height=50% }
@@ -45,7 +45,7 @@ the basics
 \
 \
 \
-![](./imgs/start.jpg){ width=50% height=50% }
+![](./imgs/start.jpg){ width=65% height=65% }
 
 # RStudio 
 ![](./imgs/console.png)
@@ -211,9 +211,7 @@ install.packages("tidyverse")
 
 # PART II
 data wrangling 
-\
-\
-![](./imgs/fishdata.PNG){ width=60% height=60% }
+
 
 # Why data wrangling?
 ![](./imgs/cartoon.PNG){ width=70% height=70% }
@@ -541,10 +539,6 @@ data_cobre %>%
   filter(age > 39)
 ```
 
-# Combine multiple operations with the pipe (`%>%`)
-![](./imgs/tidyverse_logic.PNG){ width=80% height=80% }
-
-
 # Group by multiple variables
 When you group by multiple variables, each summary peels off one level of the grouping:
 
@@ -651,3 +645,8 @@ If you have any questions on today's content, please feel free to contact me.
 
 Next week, Julian and Pedro will walk you through a Machine Learning analysis using neuropsychological data.
 
+# References
+- R for Data Science: https://r4ds.had.co.nz/
+- Open dataset: https://coins.trendscenter.org/ (create an account to download data)
+- Photos: https://unsplash.com/
+- Comic: https://www.kdnuggets.com/2017/09/cartoon-machine-learning-class.html 
