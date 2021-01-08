@@ -40,7 +40,7 @@ To install R on a Mac, click the “Download R for Mac” link. Next, click on t
 R comes preinstalled on many Linux systems, but you need the newest version of R for the tutorial if yours is out of date. The CRAN website provides files to build R from source on Debian, Redhat, SUSE, and Ubuntu systems under the link “Download R for Linux.” Click the link and then follow the directory trail to the version of Linux you wish to install on. The exact installation procedure will vary depending on the Linux system you use. CRAN guides the process by grouping each set of source files with documentation or README files that explain how to install on your system. You can customize your installation, but the defaults will be suitable for most users.
 
 # How to download and install RStudio
-RStudio is a GUI that makes writing and organizing your R code a lot easier. The RStudio interface looks the same for Windows, Mac OS, and Linux. 
+RStudio is an IDE that makes writing and organizing your R code a lot easier. The RStudio interface looks the same for Windows, Mac OS, and Linux. 
 
 You can download RStudio for free (https://rstudio.com/products/rstudio/). Install the Desktop version of R studio (Open Source Edition). Click on the corresponding button ("Download RStudio Desktop") and follow the simple instructions that follow. Once you’ve installed RStudio, you can open it like any other program on your computer—usually by clicking an icon on your desktop.
 
@@ -54,7 +54,7 @@ When you open RStudio, a window appears with three panes in it. It should look s
 
 
 # How to install packages
-Many useful functions do not come preloaded when you start R, but reside in packages that can be installed on top of R. For the tutorial, please install some packages in advance ("tidyverse", "caret", "e1071", "mlr"). To do that, type 
+Many useful functions do not come preloaded when you start R, but reside in packages to be installed on top of R. For the tutorial, please install some packages in advance ("tidyverse", "caret", "e1071", "mlr"). To do that, type 
 ```{r, eval=FALSE}
 install.packages(c("tidyverse", "caret", "e1071", "mlr"))
 ```
