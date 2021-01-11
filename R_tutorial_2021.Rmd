@@ -40,11 +40,7 @@ library(tidyverse)
 ![](./imgs/r4ds.png){ width=50% height=50% }
 
 
-# PART I
-the basics 
-\
-\
-\
+# PART I: the basics 
 ![](./imgs/start.jpg){ width=65% height=65% }
 
 # RStudio 
@@ -209,12 +205,9 @@ install.packages("tidyverse")
 ```
 
 
-# PART II
-data wrangling 
-
-
-# Why data wrangling?
+# PART II: data wrangling 
 ![](./imgs/cartoon.PNG){ width=70% height=70% }
+
 
 # Why data wrangling?
 Data often does not come in a tidy, ready-to-use format.
@@ -499,8 +492,10 @@ mutate(data_cobre, age_z_score = (age-mean(age))/sd(age))
 mutate(data_cobre, age_z_score = scale(age))
 
 ```
-# Part III
-Summarize variables with `summarize()`
+
+# Part III: summarizing
+![](./imgs/summary.jpg){width=50% height=50%}
+
 
 
 # Grouped summaries with `summarize()`
