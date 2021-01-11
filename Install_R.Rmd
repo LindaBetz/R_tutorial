@@ -1,7 +1,7 @@
 ---
 title: "Installing R, RStudio and packages"
 author: Linda T. Betz, M.Sc.
-date: January 18, 2021
+date: January 11, 2021
 output: 
   beamer_presentation:
     theme: "Boadilla"
@@ -19,7 +19,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 ```
 
 # Installing R, RStudio and packages
-In the tutorial, we will work with R, a free, open source programming language for data analytics, statistics and visualization. Please make sure to install the latest version of R *and* RStudio prior to the first tutorial session on January 18. This typically takes less than half an hour. You may follow the instructions provided here or any other available guide (e.g. https://learnr-examples.shinyapps.io/ex-setup-r/). Install R first, and *then* RStudio. Lastly, we will ask you to install some packages in advance. 
+In the tutorial, we will work with R, a free, open source programming language for data analytics, statistics and visualization. Please make sure to install the latest version of **R and RStudio** prior to the first tutorial session on January 18. This typically takes less than half an hour. Install R first, and *then* RStudio. Lastly, we will ask you to install some packages in advance. 
 \
 \
 \
@@ -42,11 +42,11 @@ R comes preinstalled on many Linux systems, but you need the newest version of R
 # How to download and install RStudio
 RStudio is an IDE that makes writing and organizing your R code a lot easier. The RStudio interface looks the same for Windows, Mac OS, and Linux. 
 
-You can download RStudio for free (https://rstudio.com/products/rstudio/download/#download). Install RStudio Desktop by selecting the correct installer depending on your operating system (the website will make a recommendation that will usually work). Once you’ve installed RStudio, you can open it like any other program on your computer—usually by clicking an icon on your desktop.
+You can download RStudio for free (https://rstudio.com/products/rstudio/download/#download). Install RStudio Desktop by selecting the correct installer depending on your operating system (the website will make a recommendation that will usually work) and follow the simple steps provided. Once you’ve installed RStudio, you can open it like any other program on your computer—usually by clicking an icon on your desktop.
 
 # Opening RStudio
 
-After both installations, please launch RStudio. If you were successful with the installations, you should see a window similar to this (note that the R version reported on your screen is newer):
+After both installations, please launch RStudio. If you were successful with the installations, you should see a window similar to this (note that the R version reported on your screen will be different):
 
 ![](./imgs/rstudio.png){ width=80% height=80% }
 
@@ -57,7 +57,7 @@ Many useful functions do not come preloaded when you start R, but reside in pack
 ```{r, eval=FALSE}
 install.packages(c("tidyverse", "caret", "e1071", "mlr"))
 ```
-at the command prompt (`>`) of the console and press enter to execute the code. A number of messages will scroll by, and there will be a 1-2 minute pause where nothing appears to happen (but the installation is actually occurring). At last, the output parade should end with a message like:
+at the command prompt (`>`) of the console and press enter to execute the code. In case you're asked whether you would also like to install dependencies, choose "yes". A number of messages will scroll by, and there will be a 1-2 minute pause where nothing appears to happen (but the installation is actually occurring). At last, the output parade should end with a message like:
 
 `The downloaded source/binary packages are in....`
 
@@ -66,7 +66,7 @@ Note that you need a connection to the internet to install packages.
 
 # Test if the installation worked
 Test if installation worked by typing in the console: `library(tidyverse)`. 
-If everything worked fine, the output in the console look similar to this:
+If everything worked fine, the output in the console should look similar to this:
 ```{r, size="tiny"}
 
 library(tidyverse)
@@ -83,7 +83,10 @@ library(mlr)
 ```
 
 # Problems
-If something did not work (e.g., you get an error of the nature `Error in library(tidyverse) : there is no package called ‘tidyverse’`), try to install the packages manually by clicking Tools → Install packages in RStudio. If you still cannot get things running, please contact us **before the tutorial** (linda.betz@uk-koeln.de) :) Once the tutorial starts, we will NOT be able to give you one-to-one assistance with troubleshooting installation problems.
+If something did not work (e.g., you get an error message of the nature `Error in library(tidyverse) : there is no package called ‘tidyverse’`), try to install the packages manually by clicking Tools → Install packages in RStudio. For other error messages, you may go ahead and google them to try to solve the problem on your own. Warning messages can be ignored for now.
+\
+\
+If you cannot get things running after consulting Google, please contact us a few days **before the tutorial** (linda.betz@uk-koeln.de) :). Once the tutorial starts, we will not be able to give you one-to-one assistance with troubleshooting installation problems.
 
 
 
