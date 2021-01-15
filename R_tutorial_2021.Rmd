@@ -41,7 +41,7 @@ library(tidyverse)
 
 
 # PART I: the basics 
-![](./imgs/start.jpg){ width=65% height=65% }
+![](./imgs/start.jpg){ width=50% height=50% }
 
 # RStudio 
 ![](./imgs/console.png)
@@ -203,6 +203,7 @@ Many useful functions are not built-in directly into R, but have to be imported 
 ```{r, eval=FALSE}
 install.packages("tidyverse")
 ```
+![](./imgs/tidyverse.png){ width=50% height=50% }
 
 
 # PART II: data wrangling 
@@ -307,7 +308,7 @@ All 'verbs' work similarly:
 - The result is a new data frame.
 
 # Filter rows with `filter()`
-`filter()` allows you to subset observations based on their values. The first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame. For example, we can select all participants with age 65.
+`filter()` allows you to subset observations based on their values. The first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame. For example, we can select all participants with an age of 65 years.
 ```{r, size="tiny"}
 filter(data_cobre, age == 65)
 ```
@@ -372,7 +373,7 @@ filter(df, is.na(x) | x > 1)
 ![](./imgs/break.jpg){width=50% height=50%}
 
 
-# Excercises
+# Excercises (I)
 Before getting started with the exercises, put the file `data_cobre.csv` in your project folder. In RStudio, click File → New File → R Script. Use this script to type in and save your solutions for the exercises (e.g. as "exercises.R"). These should be the first lines of your script:
 ```{r, eval=FALSE}
 library(tidyverse) # load the package 
@@ -380,20 +381,20 @@ data_cobre <- read_csv("data_cobre.csv") # load data
 ```
 You can run blocks of code by selecting them and pressing Ctrl+Enter (or the "Run" button in the upper right corner of the script pane).
 
-# Excercises
-- Find all participants who are 19 and younger. How many are there?
-- Find all healthy control participants who are 19 and younger. How many are there?
-- Find all women who are healthy controls and either have been diagnosed with bipolar disorder or schizophrenia. How many are there?
+# Excercises (I)
+- Find all participants who are 19 years and younger. How many are there?
+- Find all healthy control participants who are 19 years and younger. How many are there?
+- Find all women who have been diagnosed with either bipolar disorder or schizophrenia. How many are there?
 - How many patients have a missing value in the variable `age_onset_psychiatric_illness`?
 
 # Solutions
-Find all participants who are 19 and younger. How many are there?
+Find all participants who are 19 years and younger. How many are there?
 ```{r, size="tiny"}
 filter(data_cobre, age <= 19)
 ```
 
 # Solutions
-Find all healthy control participants who are 19 and younger. How many are there?
+Find all healthy control participants who are 19 years and younger. How many are there?
 ```{r, size="tiny"}
 filter(data_cobre, study_group == "control" & age <= 19)
 ```
@@ -436,9 +437,11 @@ select(data_cobre, contains("age"))
 rename(data_cobre, participant_id = id) # logic: new_name = old_name
 ```
 
-# Exercises
+# Exercises (II)
 - Rename all variables such that they contain upper case letters only.
-- Select all variables that contain the word "study" or "age".
+- Select all variables which contain the word "study" or "age".
+
+Remember to use Google if necessary :)
 
 # Solutions
 Rename all variables such that they contain upper case letters only.
@@ -470,7 +473,7 @@ There are many functions for creating new variables that you can use with `mutat
 - Logs: `log()`, `log2()`, `log10()`.
 - Logical comparisons: `<`, `<=`, `>`, `>=`, `!=`, and `==`.
 
-# Exercises
+# Exercises (III)
 - Create a new variable `patient` that indicates if a participant has been diagnosed with any disorder or not.
 - Z-transform the variable `age`, and store the result in a new variable called `age_z_score`.
 
@@ -479,11 +482,11 @@ Remember to use Google if necessary :)
 # Solutions
 Create a new variable `patient` that indicates if a participant has been diagnosed with any disorder or not.
 ````{r, size="tiny"}
-mutate(data_cobre, patient = if_else(study_group == "control", true = TRUE, false = FALSE)) 
+mutate(data_cobre, patient = if_else(study_group != "control", true = "yes", false = "no")) 
 ```
 
 # Solutions
-Z-transform the variable "age", and store the result in a new variable called "age_z_score".
+Z-transform the variable `age`, and store the result in a new variable called `age_z_score`.
 ````{r, size="tiny"}
 mutate(data_cobre, age_z_score = (age-mean(age))/sd(age))
 
@@ -565,20 +568,20 @@ Looks like missing values are coded as '9999'. Let's change that:
 ````{r, size="tiny"}
 data_cobre %>%
   mutate(
-    age_onset_psychiatric_illness = if_else( # recode 9999 to NA
-      age_onset_psychiatric_illness == "9999",
-      true = NA_real_, # convert character to numeric vector
-      false = as.numeric(age_onset_psychiatric_illness) # convert character to numeric vector
+    age_onset_psychiatric_illness = if_else( 
+      age_onset_psychiatric_illness == 9999,
+      true = NA_real_, 
+      false = age_onset_psychiatric_illness 
     )
   ) %>%
   summarize(mean = mean(age_onset_psychiatric_illness, na.rm = TRUE))
 ```
 
-# Exercises (use `%>%`)
+# Exercises (IV) (use `%>%`)
 - Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder and those who do not.
-- Recode the values in the variables `age_onset_psychiatric_illness` and `age_first_hospitalization` such that it can be analyzed properly. Overwrite the existing variables in `data_cobre`.
+- Recode the values in the variables `age_onset_psychiatric_illness` and `age_first_hospitalization` such that they can be analyzed properly. Overwrite the existing variables in `data_cobre`.
 - Create a new variable that gives the time since the onset of psychiatric illness in years. Then compute the mean time since onset of psychiatric illness for men and women.
-- Compute the median of age of onset of psychiatric illness by diagnosis.
+- Compute the median age of onset of psychiatric illness by diagnosis.
 
 # Solutions
 Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder and those who do not.
@@ -593,23 +596,24 @@ data_cobre %>%
 ```
 
 # Solutions
-Recode the values in the variables `age_onset_psychiatric_illness` and `age_first_hospitalization` such that it can be analyzed properly. Overwrite the existing variables in `data_cobre`.
+Recode the values in the variables `age_onset_psychiatric_illness` and `age_first_hospitalization` such that they can be analyzed properly. Overwrite the existing variables in `data_cobre`.
 ````{r, size="tiny"}
+table(data_cobre$age_first_hospitalization)
+
 data_cobre <- data_cobre %>%
   mutate(
     age_onset_psychiatric_illness = if_else(
-      # recode 9999 to NA
-      age_onset_psychiatric_illness == "9999",
+      age_onset_psychiatric_illness == 9999,
       true = NA_real_,
-      false = as.numeric(age_onset_psychiatric_illness)
+      false = age_onset_psychiatric_illness
     ),
     age_first_hospitalization = if_else(
-      # recode 9999 to NA
-      age_first_hospitalization == "9999",
+      age_first_hospitalization %in% c("9999", "0", "05"),
       true = NA_real_,
       false = as.numeric(age_first_hospitalization)
     )
-  ) 
+  )
+
 ```
 
 # Solutions
@@ -623,7 +627,7 @@ data_cobre %>%
 ```
 
 # Solutions
-Compute the median of age of onset of psychiatric illness by diagnosis.
+Compute the median age of onset of psychiatric illness by diagnosis.
 ````{r, size="tiny"}
 data_cobre %>%
   filter(study_group != "control") %>%

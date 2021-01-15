@@ -154,7 +154,7 @@ outer <-
 
 
 set.seed(1)
-neuropsych_cobre_resampling <- resample(
+resampling_cobre_neuropsych <- resample(
   lrn,
   task_cobre_neuropsych,
   resampling = outer,
@@ -167,8 +167,8 @@ neuropsych_cobre_resampling <- resample(
 
 # ---------------------------------- 4: plot resuls  -----------------------------------
 # plot train vs. test bac for each iteration of resampling
-neuropsych_cobre_resampling$measures.train %>% mutate(set = "train") %>%
-  bind_rows(neuropsych_cobre_resampling$measures.test %>% mutate(set = "test")) %>%
+resampling_cobre_neuropsych$measures.train %>% mutate(set = "train") %>%
+  bind_rows(resampling_cobre_neuropsych$measures.test %>% mutate(set = "test")) %>%
   mutate(set = factor(set, levels = c("train", "test"))) %>%
   ggplot(., aes(
     x = iter,
