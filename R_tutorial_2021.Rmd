@@ -69,7 +69,7 @@ object_name <- value
 object names
 
 - … must start with a character 
-- … can only contain letters, numbers, _ and ..
+- … can only contain letters, numbers, _ and .
 - good practice: “snake_case”
 
 ```{r, eval = FALSE}
@@ -88,11 +88,11 @@ x
 # The basics
 Object names can be long:
 ```{r, include=TRUE}
-this_is_a_really_long_name <- 2.5
-```
-If we made a mistake and, for instance, wanted to set the value to 3.5, wie can simply overwrite the old value.
-```{r, include=TRUE}
 this_is_a_really_long_name <- 3.5
+```
+If we made a mistake and, for instance, wanted to set the value to 2.5, we can simply overwrite the old value.
+```{r, include=TRUE}
+this_is_a_really_long_name <- 2.5
 ```
 
 # The basics
@@ -111,7 +111,6 @@ Typos matter. Case matters.
 ```{r, include=TRUE, eval=FALSE}
 function_name(arg1 = val1, arg2 = val2, ...)
 ```
-# The basics
 ```{r}
 seq(1, 10)
 ```
@@ -150,7 +149,7 @@ The `+` tells you that R is waiting for more input; it doesn't think you're done
 
 
 # The basics
-In the environment in the upper right pane, you can see all of the objects that you’ve created.
+In the environment in the upper right pane, we can see all of the objects that we’ve created.
 \
 \
 ![](./imgs/environment.PNG){ width=85% height=85% }
@@ -308,7 +307,7 @@ All 'verbs' work similarly:
 - The result is a new data frame.
 
 # Filter rows with `filter()`
-`filter()` allows you to subset observations based on their values. The first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame. For example, we can select all participants with an age of 65 years.
+`filter()` allows you to subset observations based on their values. The first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame. For example, we can filter all participants with an age of 65 years.
 ```{r, size="tiny"}
 filter(data_cobre, age == 65)
 ```
@@ -373,7 +372,7 @@ filter(df, is.na(x) | x > 1)
 ![](./imgs/break.jpg){width=50% height=50%}
 
 
-# Excercises (I)
+# Exercises (I)
 Before getting started with the exercises, put the file `data_cobre.csv` in your project folder. In RStudio, click File → New File → R Script. Use this script to type in and save your solutions for the exercises (e.g. as "exercises.R"). These should be the first lines of your script:
 ```{r, eval=FALSE}
 library(tidyverse) # load the package 
@@ -381,7 +380,7 @@ data_cobre <- read_csv("data_cobre.csv") # load data
 ```
 You can run blocks of code by selecting them and pressing Ctrl+Enter (or the "Run" button in the upper right corner of the script pane).
 
-# Excercises (I)
+# Exercises (I)
 - Find all participants who are 19 years and younger. How many are there?
 - Find all healthy control participants who are 19 years and younger. How many are there?
 - Find all women who have been diagnosed with either bipolar disorder or schizophrenia. How many are there?
@@ -439,7 +438,7 @@ rename(data_cobre, participant_id = id) # logic: new_name = old_name
 
 # Exercises (II)
 - Rename all variables such that they contain upper case letters only.
-- Select all variables which contain the word "study" or "age".
+- Select all variables which contain the words "study" or "age".
 
 Remember to use Google if necessary :)
 
@@ -450,7 +449,7 @@ rename_with(data_cobre, toupper)
 ```
 
 # Solutions
-Select all variables that contain the word "study" or "age".
+Select all variables that contain the words "study" or "age".
 ```{r, size="tiny"}
 select(data_cobre, matches("study|age"))
 ```
