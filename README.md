@@ -4,4 +4,3 @@ Files for R tutorial which is part of the course "Multivariate and Neuroimaging 
 
 Based on selected chapters from "R for Data Science" (https://r4ds.had.co.nz/). Uses open data from https://coins.trendscenter.org/ ("COBRE" data set, which contains data from patients diagnosed with schizophrenia-spectrum disorders and control participants).
 
-Work in progress.
