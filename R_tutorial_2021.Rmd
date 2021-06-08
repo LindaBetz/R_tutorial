@@ -21,7 +21,7 @@ library(tidyverse)
 ```
 # Structure of the tutorial
 
-- January 18 (today): introduction to basic R syntax and priniciples, data cleaning and wrangling
+- January 18 (today): introduction to basic R syntax and priniciples, data cleaning
 - January 25: Machine Learning in R (part I)
 - Feburary 1: Machine Learning in R (part II), working on your reports
 
