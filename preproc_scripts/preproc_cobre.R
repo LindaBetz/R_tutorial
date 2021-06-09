@@ -20,8 +20,10 @@ library(tidyverse)
 # load data (available via https://coins.trendscenter.org/)
 demographics_cobre_raw <-
   read_csv("raw_data/1139_Demographics_20201215.csv")
+
 neuropsych_cobre_raw <-
   read_csv("raw_data/1139_Cobre_Neuropsych_V2_20201215.csv")
+
 
 neuropsych_cobre <- neuropsych_cobre_raw %>%
   .[2:nrow(.), ] %>% # first row has duplicated column headings
