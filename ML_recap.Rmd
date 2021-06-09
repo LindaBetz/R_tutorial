@@ -1,0 +1,55 @@
+---
+title: "Tutorial: Machine Learning Recap"
+author: Linda T. Betz, M.Sc.
+date: June 29, 2021
+output: 
+  beamer_presentation:
+    theme: "Boadilla"
+    colortheme: "seahorse"
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+
+library(tidyverse)
+library(mlr)
+
+```
+
+# Structure of the tutorial
+- x (today): introduction to basic R syntax and priniciples, data cleaning and wrangling
+- x: Machine Learning in R (part I)
+- x: Machine Learning in R (part II), working on your reports
+
+# Today's tutorial ...
+... is based on the mlr3 book (https://mlr3book.mlr-org.com/index.html).
+
+# Machine Learning in a nutshell
+add
+
+# Tasks
+Tasks encapsulate the data set and other relevant information about a machine learning problem, for example the name of the target variable for supervised problems.
+
+Different types of tasks (depending on the problem): classification tasks, regression tasks, survival analysis tasks, cluster analysis tasks...
+
+
+# Tasks
+Example: binary classification task for breast cancer (benign vs. malignant)
+```{r, include=TRUE, size="tiny"}
+data(BreastCancer, package = "mlbench") # load data
+classif.task <- makeClassifTask(id = "BreastCancer", data = BreastCancer %>% select(-Id), target = "Class")
+classif.task
+```
+
+# Learner
+ A learner is a machine learning algorithm. Most of the popular learners can generally be used for both classification and regression (e.g. SVM, Random Forests, kNN, ...).
+```{r, include=TRUE, size="tiny"}
+# classification random forest, set it up for predicting probabilities
+classif.lrn <- makeLearner("classif.randomForest", predict.type = "prob")
+classif.lrn
+```

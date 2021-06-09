@@ -1,7 +1,7 @@
 ---
 title: "Tutorial: Data Analysis with R"
 author: Linda T. Betz, M.Sc.
-date: January 18, 2021
+date: June 28, 2021
 output: 
   beamer_presentation:
     theme: "Boadilla"
@@ -21,9 +21,9 @@ library(tidyverse)
 ```
 # Structure of the tutorial
 
-- January 18 (today): introduction to basic R syntax and priniciples, data cleaning
-- January 25: Machine Learning in R (part I)
-- Feburary 1: Machine Learning in R (part II), working on your reports
+- *x (today): introduction to basic R syntax and priniciples, data cleaning and wrangling*
+- x: Machine Learning in R (part I)
+- x: Machine Learning in R (part II), working on your reports
 
 
 # Why R?
@@ -153,6 +153,12 @@ In the environment in the upper right pane, we can see all of the objects that w
 \
 \
 ![](./imgs/environment.PNG){ width=85% height=85% }
+
+# The basics
+RStudio Diagnostics
+The script editor will highlight syntax errors with a red squiggly line and a cross in the sidebar:
+Hover over the cross to see what the problem is:
+RStudio will also let you know about potential problems:
 
 # The basics
 Important:
