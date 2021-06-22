@@ -19,12 +19,14 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 library(tidyverse)
 
 ```
+# Introduction
+![](./imgs/hello.jpg){ width=50% height=50% }
+
 # Structure of the tutorial
-
-- *x (today): introduction to basic R syntax and priniciples, data cleaning and wrangling*
-- x: Machine Learning in R (part I)
-- x: Machine Learning in R (part II), working on your reports
-
+- June 28 (today): Introduction to R & Data Wrangling
+- June 29: Recap of ML concepts, Hands-On ML Analyses
+- June 30: Hands-On ML Analyses
+- July 1: Hands-On ML Analyses
 
 # Why R?
 
@@ -154,11 +156,6 @@ In the environment in the upper right pane, we can see all of the objects that w
 \
 ![](./imgs/environment.PNG){ width=85% height=85% }
 
-# The basics
-RStudio Diagnostics
-The script editor will highlight syntax errors with a red squiggly line and a cross in the sidebar:
-Hover over the cross to see what the problem is:
-RStudio will also let you know about potential problems:
 
 # The basics
 Important:
@@ -247,9 +244,9 @@ When you run `read_csv()`, it prints out a column specification with the name an
 
 # The dataset
 - Open dataset from the Center for Biomedical Research Excellence (https://coins.trendscenter.org)
-- Contains clinical participants with various diagnoses from the schizophrenia spectrum, and healthy controls
+- Contains clinical participants with a diagnosis with schizophrenia, and healthy controls
 - Every row represents one participant, every column is a variable 
-- We'll use neuropsychological data later for Machine Learning 
+- We'll use neuroimaging data later for Machine Learning 
 ```{r, message = TRUE, size="tiny"}
 data_cobre 
 ```
@@ -340,16 +337,16 @@ Multiple arguments to `filter()` are combined with “and”: every expression m
 ![](./imgs/booleans.png){ width=50% height=50% }
 
 # Logical operations
-The following code finds all participants that are either defined as "bipolar" or "schizoaffective":
+The following code finds all participants that are either 16 or 18 years old:
 
 ```{r, size="tiny"}
-filter(data_cobre, study_group == "bipolar" | study_group == "schizoaffective")
+filter(data_cobre, age == 16 | age == 18)
 ```
 
 # Logical operations
 A useful short-hand for this problem is `x %in% y`. This will select every row where x is one of the values in y. We could use it to rewrite the code on the previous slide:
 ```{r, size="tiny"}
-filter(data_cobre, study_group %in% c("bipolar", "schizoaffective"))
+filter(data_cobre, study_group %in% c(16, 18))
 ```
 
 
@@ -389,7 +386,7 @@ You can run blocks of code by selecting them and pressing Ctrl+Enter (or the "Ru
 # Exercises (I)
 - Find all participants who are 19 years and younger. How many are there?
 - Find all healthy control participants who are 19 years and younger. How many are there?
-- Find all women who have been diagnosed with either bipolar disorder or schizophrenia. How many are there?
+- Find all men who are 22, 25 or 27 years old. How many are there?
 - How many patients have a missing value in the variable `age_onset_psychiatric_illness`?
 
 # Solutions
@@ -405,9 +402,9 @@ filter(data_cobre, study_group == "control" & age <= 19)
 ```
 
 # Solutions
-Find all women who have been diagnosed with either bipolar disorder or schizophrenia. How many are there?
+Find all men who are 22, 25 or 27 years old. How many are there?
 ```{r, size="tiny"}
-filter(data_cobre, gender == "female" & study_group %in% c("bipolar", "schizophrenia"))
+filter(data_cobre, gender == "male" & age %in% c(22, 25, 27))
 ```
 
 # Solutions
@@ -479,16 +476,10 @@ There are many functions for creating new variables that you can use with `mutat
 - Logical comparisons: `<`, `<=`, `>`, `>=`, `!=`, and `==`.
 
 # Exercises (III)
-- Create a new variable `patient` that indicates if a participant has been diagnosed with any disorder or not.
 - Z-transform the variable `age`, and store the result in a new variable called `age_z_score`.
 
 Remember to use Google if necessary :)
 
-# Solutions
-Create a new variable `patient` that indicates if a participant has been diagnosed with any disorder or not.
-````{r, size="tiny"}
-mutate(data_cobre, patient = if_else(study_group != "control", true = "yes", false = "no")) 
-```
 
 # Solutions
 Z-transform the variable `age`, and store the result in a new variable called `age_z_score`.
@@ -528,18 +519,18 @@ summarize(by_group, age = mean(age), .groups = "keep") # mean age per group
 
 # Combine multiple operations with the pipe (`%>%`)
 ````{r, size="tiny"}
-by_group <- group_by(data_cobre, study_group) # save grouped data frame here
+by_group <- group_by(data_cobre, study_group, gender) # save grouped data frame here
 mean_age_groups <- summarize(by_group, age = mean(age), .groups = "drop") # mean age per group
-filtered_age <- filter(mean_age_groups, age > 39)
+filtered_age <- filter(mean_age_groups, age > 35)
 ```
 
 An alternative, faster and less frustrating way to tackle this proplem is the pipe operator (`%>%`), which focuses on the transformations, not what’s being transformed, which makes the code easier to read. You can read it as a series of imperative statements: group, then summarize, then filter.
 
 ````{r, size="tiny"}
 data_cobre %>% 
-  group_by(study_group) %>% # save grouped data frame here
+  group_by(study_group, gender) %>% # save grouped data frame here
   summarize(age = mean(age), .groups = "drop") %>% # mean age per group
-  filter(age > 39)
+  filter(age > 35)
 ```
 
 # Group by multiple variables
@@ -583,10 +574,17 @@ data_cobre %>%
 ```
 
 # Exercises (IV) (use `%>%`)
+- Create a new variable `young_participant` that indicates if a participant is younger than the median age in the sample.
 - Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder and those who do not.
 - Recode the values in the variables `age_onset_psychiatric_illness` and `age_first_hospitalization` such that they can be analyzed properly. Overwrite the existing variables in `data_cobre`.
 - Create a new variable that gives the time since the onset of psychiatric illness in years. Then compute the mean time since onset of psychiatric illness for men and women.
-- Compute the median age of onset of psychiatric illness by diagnosis.
+
+# Solutions
+Create a new variable `young_participant` that indicates if a participant is younger than the median age in the sample.
+````{r, size="tiny"}
+data_cobre %>%
+transmute(age, young_participant = if_else(age < median(age, na.rm = TRUE), true = "yes", false = "no")) 
+```
 
 # Solutions
 Compute the mean (sd) age for patients who have a first degree relative with a psychotic disorder and those who do not.
@@ -631,15 +629,6 @@ data_cobre %>%
             .groups = "keep")
 ```
 
-# Solutions
-Compute the median age of onset of psychiatric illness by diagnosis.
-````{r, size="tiny"}
-data_cobre %>%
-  filter(study_group != "control") %>%
-  group_by(study_group) %>%
-  summarize(age_onset_median = median(age_onset_psychiatric_illness, na.rm = TRUE),
-             .groups = "keep")
-```
 
 
 # Thank you for your attention!
@@ -647,7 +636,7 @@ If you have any questions on today's content, please feel free to contact me.
 
 - linda.betz@uk-koeln.de
 
-Next week, Julian and Pedro will walk you through a Machine Learning analysis using neuropsychological data.
+In the upcoming days, we will walk you through a Machine Learning analysis using neuroimaging data.
 
 # References
 - R for Data Science: https://r4ds.had.co.nz/

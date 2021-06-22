@@ -22,19 +22,24 @@ library(mlr)
 ```
 
 # Structure of the tutorial
-- x (today): introduction to basic R syntax and priniciples, data cleaning and wrangling
-- x: Machine Learning in R (part I)
-- x: Machine Learning in R (part II), working on your reports
+- June 28: Introduction to R & Data Wrangling
+- June 29 (today): Recap of ML concepts, Hands-On ML Analyses
+- June 30: Hands-On ML Analyses
+- July 1: Hands-On ML Analyses
 
 # Today's tutorial ...
-... is based on the documentation of the mlr package, the mlr3 book (https://mlr3book.mlr-org.com/index.html), and the interactive lecture "Introduction to Machine Learning" (https://introduction-to-machine-learning.netlify.app/).
+... is based on the documentation of the mlr package (https://mlr.mlr-org.com/) and the interactive lecture "Introduction to Machine Learning" (https://introduction-to-machine-learning.netlify.app/).
 
 # What is Machine Learning?
 ![](./imgs/ML_overview.PNG){ width=80% height=80% }
 
 
 # Machine Learning in a nutshell
-add
+We typically have 3 components:
+
+- a task (i.e., the ML problem)
+- a learner (i.e., a specific ML algorithm)
+- an optimization/tuning scheme
 
 # Tasks
 Tasks contain the data set and other relevant information about a machine learning problem, for example the name of the target variable for supervised problems.
@@ -51,29 +56,26 @@ classif.task
 ```
 
 # Learner
- A learner is a machine learning algorithm. Most of the popular learners can generally be used for both classification and regression (e.g. SVM, Random Forests, kNN, ...).
+ A learner is a ML algorithm. Most of the popular algorithms can generally be used for both classification and regression (e.g. SVM, Random Forests, kNN, ...).
 ```{r, include=TRUE, size="tiny"}
-# classification random forest, set it up for predicting probabilities
-classif.lrn <- makeLearner("classif.randomForest", predict.type = "prob")
+# classification SVM, set it up for predicting probabilities
+classif.lrn <- makeLearner("classif.ksvm", predict.type = "prob")
 classif.lrn
 ```
 
 # Quiz
-Which statements are true?
-The target/outcome in linear regression has to be numeric
-The features in linear regression have to be numeric
-The classical linear model from statistics with Gaussian errors is linear regression with L2-loss
+- via Zoom
 
-# Tuning Hyperparameters
-Many machine learning algorithms have hyperparameters that need to be set. Often suitable parameter values are not obvious and it is preferable to "tune" the hyperparameters, i.e., to automatically identify values that lead to the best performance.
+# Tuning hyperparameters
+Many machine learning algorithms have hyperparameters that need to be set. Often suitable values are not obvious and it is preferable to "tune" the hyperparameters, i.e., to automatically identify values that lead to the best performance.
 
 To tune a machine learning algorithm, you have to specify:
 
-- the search space;
+- the search space, i.e., the range of values of the hyperparameter(s) you want to cover;
 - the optimization algorithm (a.k.a. tuning method);
 - an evaluation method, i.e., a resampling strategy and a performance measure.
 
-# Tuning Hyperparameters
+# Tuning hyperparameters
 ```{r, include=TRUE}
 # create a search space for the C hyperparameter (SVM)
 search_space <- makeParamSet(
@@ -89,6 +91,9 @@ resample <- makeResampleDesc("CV", iters = 3L)
 # use balanced accuravy (BAC) as performance measure
 measure <- bac
 ```
+# Quiz
+- via Zoom
+
 
 # Model parameters vs. hyperparameters
 Don't confuse model parameters with hyperparameters.
@@ -112,32 +117,30 @@ Examples:
 
 
 # Resampling
-Instead of using a single train/test split for tuning the hyperparameters, we can repeat the process several times to get more stable results. This resampling can have different structural forms, such as cross-validation, bootstrapping, subsampling, etc.
+Instead of using a single train/validation split for tuning the hyperparameters, we can repeat the process several times to get more stable results. This resampling can have different structural forms, such as cross-validation, bootstrapping, subsampling, etc. Repeating the resampling process can improve error estimation for small sample sizes.
 
 Example: 4-fold cross-validation
 
-![](./imgs/Tuning.png){ width=80% height=80% }
+![](./imgs/Tuning.png){ width=75% height=75% }
 
 # Train - validate - test
 After optimizing the hyperparameters, we typically want to evaluate our model. Evaluation on data that was part of the training process leads to overly optimistic performance estimates. For unbiased performance estimates, we need a truly "untouched" test data set only used once after a model is completely trained. 
 
 ![](./imgs/train_validate_test.png){ width=90% height=90% }
 
-# Nested Resampling
-As with hyperparameter tuning, model evaluation can be repeated. Hence, we end up with "nested resampling" - outer resampling for model evaluation and inner resampling for hyperparameter optimization.
+# Nested resampling
+As with hyperparameter tuning, model evaluation can be repeated. Hence, we end up with "nested resampling" - outer resampling for model evaluation and inner resampling for hyperparameter optimization. 
 
 ![](./imgs/nested_resampling.png){ width=90% height=90% }
 
 # Quiz
-Which statements are true?
-- cross-validation, bootstrap, and subsampling are resampling techniques.
-- Estimating the expected generalization error is a goal of resampling.
-- In resampling, the data set is split repeatedly into training and tests sets.
-- Resampling strategies are completely unbiased.
+- via Zoom
 
-Which statements are true?
-- Tuning means optimizing hyperparameters.
-- Doing tuning well is hard; nested resampling can help.
-- Good tuning is crucial to achieve good performance for all ML algorithms.
-- Tuning optimizes the inner loss.
+# Any questions?
+![](./imgs/questions.jpg){ width=75% height=75% }
+
+# References
+- Documentation of the mlr package (https://mlr.mlr-org.com/)
+- Interactive lecture "Introduction to Machine Learning" (https://introduction-to-machine-learning.netlify.app/).
+- Photos: https://unsplash.com/
 
