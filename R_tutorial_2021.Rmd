@@ -346,7 +346,7 @@ filter(data_cobre, age == 16 | age == 18)
 # Logical operations
 A useful short-hand for this problem is `x %in% y`. This will select every row where x is one of the values in y. We could use it to rewrite the code on the previous slide:
 ```{r, size="tiny"}
-filter(data_cobre, study_group %in% c(16, 18))
+filter(data_cobre, age %in% c(16, 18))
 ```
 
 
