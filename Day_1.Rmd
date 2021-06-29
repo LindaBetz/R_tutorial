@@ -536,7 +536,7 @@ summarize(by_group, age = mean(age)) # mean age per group
 # Combine multiple operations with the pipe (`%>%`)
 ````{r, size="tiny"}
 by_group <- group_by(data_cobre, study_group, gender) # save grouped data frame here
-mean_age_groups <- summarize(by_group, age = mean(age)) # mean age per group
+mean_age_groups <- summarize(by_group, age = mean(age), .groups = "drop") # mean age per group
 filtered_age <- filter(mean_age_groups, age > 35)
 ```
 
@@ -609,7 +609,7 @@ Note that when testing multiple conditions, the code is more readable and less e
 Change the levels of of the variable `first_degree_relative_psychosis` from `TRUE` and `FALSE` to "yes" and "no".
 ````{r, size="tiny"}
 data_cobre %>%
-  transmute(
+  mutate(
     first_degree_relative_psychosis = if_else(
       first_degree_relative_psychosis == TRUE,
       true = "yes",
@@ -621,12 +621,10 @@ data_cobre %>%
 # Solutions
 Create a new variable `young_participant` that indicates if a participant is younger than the median age in the sample.
 ````{r, size="tiny"}
-data_cobre %>%
-  transmute(age, young_participant = if_else(
-    age < median(age, na.rm = TRUE),
-    true = "yes",
-    false = "no"
-  )) 
+data_cobre %>%  # can also use mutate
+  transmute(age, young_participant = if_else(age < median(age),
+                                             true = "yes",
+                                             false = "no")) 
 ```
 
 # Solutions
