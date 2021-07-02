@@ -1,0 +1,135 @@
+Quiz Questions & Answers
+“Clinical Neuroscience I - Hands-On Methods Tutorial”
+
+1) Which statement is true?
+a) A powerful Machine Learning algorithm will take care of messy data.
+b) Transformation of variables can help to boost the performance of a Machine Learning algorithm. (CORRECT)
+c) Variable selection is something we generally don't need to worry about as this step can be performed automatically by the Machine Learning algorithm.
+
+2) Examples for supervised Machine Learning include…
+a) determining whether patients are similar based on their symptoms 
+b) detection of anomalies in images, e.g. brain lesions (CORRECT)
+c) predicting which medication will work best for a given patient (CORRECT)
+
+3) Which statements are true?
+a) The target/outcome in regression has to be numeric (CORRECT)
+b) The features in regression have to be numeric
+c) The classical linear model from statistics with Gaussian errors is linear regression with L2-loss (CORRECT)
+
+4) Is linear regression Machine Learning?
+a) Yes (No “right” or “wrong” here :-), but I would say yes)
+b) No 
+
+5) Which of these data wrangling operations can be performed *before* the Machine Learning Analysis?
+a) Principal Component Analysis (PCA)
+b) Filter (= remove features that do not correlate with the outcome)
+c) Replace unrealistic values (e.g. age of 999) with 'NA' (CORRECT)
+d) Scale features 
+e) Make coding of features consistent across participants (CORRECT)
+f) Imputation of missing values via median
+
+6) Which statement is true?
+a) Different algorithms require different kinds of data preparation. (CORRECT)
+b) Missing data should be imputed.
+c) Dichotomization of features is a good choice if the goal is to construct simple models.
+d) Feature selection in ML should preferably be data-driven.
+
+7) What is the aim of our machine learning classification pipeline?
+a) The prediction of future outcome of schizophrenic patients and controls based on their brain structure.
+b) The prediction of class assignment (schizophrenic patients or controls) based on their brain thickness.
+c) The prediction of class assignment (schizophrenic patients or controls) based on their brain structure. (CORRECT)
+d) The comparison between controls and schizophrenic patients with respect to brain structure
+ 
+8) What is correct about the support vector machine algorithm?
+a)  It fits a decision boundary in high dimensional space to separate given labels by minimizing its distance to the closest observations.
+b) It fits a decision boundary in high dimensional space to separate given labels by maximizing its distance to the farthest observations.
+c) It fits a decision boundary high dimensional space to separate given labels by maximizing its distance to the farthest observations.
+d) It can be optimized. (CORRECT)
+
+9) What is correct?
+a)  In machine learning the AI decides on the necessary preprocessing steps.
+b) An important preprocessing step for SVM’s is scaling because SVM’s can only deal with very high numbers.
+c)  A principal component analysis can reduce a high-dimensional data set to components that explain the most variance. (CORRECT)
+d) It is not allowed to correct for covariates as this might bias the resulting machine learning model. 
+
+10) What is optimisation?
+a) It finds the optimal (combination of) model parameters for a given machine learning task.
+b)  It tunes values of a hyperparameter to increase the accuracy in a classification task. (CORRECT)
+c)  It is one important aspect distinguishing machine learning from classical statistical approaches. (CORRECT)
+d) It finds the observations in a data set that can be maximally discriminated by the decision boundary. 
+
+11) The search space …
+a) is an imaginary ‘space’ of values that can be potentially taken by the hyperparameters. (CORRECT)
+b) needs to be defined. (CORRECT)
+c) provides the boundaries within which a hyperparameter can be tuned. (CORRECT)
+d) can be ‘problematic’ if it is too large. (CORRECT)
+
+Cross Validation (Slide 43)
+12) Why do we use nested cross validation?
+   a) To divide the dataset in folds and speed up the model training
+   b) To create more data based on the folds
+   c) To guarantee that all the data will be used both for training and testing (CORRECT)
+   d) To improve the performance of the model
+
+13) What is the impact of increasing/decreasing the number of repetitions and folds in the cross validation?
+   a) More repetitions improve the model performance
+   b) More repetitions improve the model speed
+   c) More repetitions increase the computation time (CORRECT)
+   d) More repetitions make the predictions more trustworthy (CORRECT)
+
+14) In a scenario with a 10 x 10 nested cross validation with 3 permutations and 300 people in the dataset, how many people would be in each of the outer and inner folds?
+   a) 25 in each outer fold and 25 on each inner fold
+   b) 20 in each outer fold and 20 on each inner fold
+   c) 30 in each outer fold and 27 on each inner fold (CORRECT)
+   d) 10 in each outer fold and 9 on each inner fold
+
+Results (Slide 48)
+15) What indicates overfitting in our results?
+   a) High performance on testing and low performance on training
+   b) Low performance on testing and low performance on training
+   c) High performance on testing and high performance on training
+   d) Low performance on testing and high performance on training (CORRECT)
+  
+16) What is sensitivity?
+   a) A metric on how good our model was in identifying True Positives (CORRECT)
+   b) A metric on how good our model was in identifying True Negatives
+   c) The average between the ratio of True Positives and True Negatives
+   d) The measure of how imbalanced our dataset is
+  
+17) What could be a reason for having a high very imbalanced values for specificity and sensitivity?
+   a) A small sample size
+   b) An imbalance on the predicted category (CORRECT)
+   c) An error in the data extraction
+   d) An imbalance in the number of features and observations in a dataset
+  
+18) Why do we use Balanced Accuracy?
+   a) To assess the accuracy of the training tasks
+   b) To assess the accuracy of the testing tasks
+   c) To assess the model performance, taking any imbalances in the dataset into account (CORRECT)
+   d) To reduce imbalance in the dataset
+
+Feature importance (slide 61)
+19) What does it mean to have a feature importance value closer to zero?
+   a) That the feature is important to the model prediction
+   b) That the feature is unimportant to the model prediction (CORRECT)
+   c) That the feature is confounding the model
+  
+20) What is the best approach to assess the importance of a feature?
+   a) Remove the feature from the dataset
+   b) Shuffle the feature values in the dataset (CORRECT)
+   c) Replace the feature values by a single value (e.g. zeros)
+   d) Replace the feature values by randomly generated values
+  
+Regression (Slide 75)
+21) In which of the following scenarios could we use a regression analysis?
+   a) Predicting the gender of an individual
+   b) Predicting the IQ of an individual(CORRECT)
+   c) Predicting the score of an individual in a test(CORRECT)
+   d) Predicting the weight of an individual(CORRECT)
+22) Why can't we use stratification in a regression analysis?
+   a) Because the features used for prediction are not in a continuous format
+   b) Because we do not use Balanced Accuracy in the regression task
+   c) Because we don't have groups for the target feature (CORRECT)
+   d) All the above
+   e) None of the above
+
