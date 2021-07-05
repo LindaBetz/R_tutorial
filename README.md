@@ -2,7 +2,7 @@
 
 Files for R tutorial which is part of the course "Clinical Neurosciences I" at University of Cologne, 2021. 
 
-Install_R.Rmd: detailed guide on how to install the software we need for the course.
+Install_R.Rmd: detailed guide on how to install the software we need prior to the course.
 
 Day 1: Based on selected chapters from "R for Data Science" (https://r4ds.had.co.nz/). Uses open data from https://coins.trendscenter.org/ ("COBRE" data set, which contains data from patients diagnosed with schizophrenia and control participants).
 
