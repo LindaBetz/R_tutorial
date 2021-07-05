@@ -1,6 +1,6 @@
 # R/ML tutorial 2021 @ University of Cologne
 
-Files for R tutorial which is part of the course "Clinical Neurosciences I" at University of Cologne, 2021. 
+Files for R tutorial which is part of the Master course "Clinical Neurosciences I" at University of Cologne, 2021. 
 
 Install_R.Rmd: detailed guide on how to install the software we need prior to the course.
 
