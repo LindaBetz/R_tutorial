@@ -1,4 +1,4 @@
-# R tutorial 2021 @ University of Cologne
+# R/ML tutorial 2021 @ University of Cologne
 
 Files for R tutorial which is part of the course "Clinical Neurosciences I" at University of Cologne, 2021. 
 
